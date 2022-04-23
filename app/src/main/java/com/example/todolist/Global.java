@@ -7,4 +7,6 @@ public class Global {
             new Theme("White", "#EEEEEE", "#999999", "#333333", "#000000")
     };
     public static Theme theme = THEMES[0];
+
+    public static DBOpenHelper myDb;
 }
