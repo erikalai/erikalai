@@ -1,4 +1,4 @@
-package com.example.todolist;
+package com.com3104.todolist;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,7 +8,9 @@ import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -29,7 +31,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // TODO: set theme according to SharedPreferences
+        Global.sharedPreferences = getSharedPreferences("MyProfile", Context.MODE_PRIVATE);
+
+        int themeID = Global.sharedPreferences.getInt("Theme", -1);
+        if (themeID == -1) {
+            // first time, set to default value
+            themeID = 0;
+            SharedPreferences.Editor editor = Global.sharedPreferences.edit();
+            editor.putInt("Theme", themeID);
+            editor.commit();
+        }
+
+        // set theme according to SharedPreferences
+        Global.theme = Global.THEMES[themeID];
 
         // background color
         ConstraintLayout window = findViewById(R.id.main_activity_window);
