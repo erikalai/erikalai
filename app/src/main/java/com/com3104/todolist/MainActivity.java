@@ -1,28 +1,23 @@
 package com.com3104.todolist;
 
-import androidx.appcompat.app.ActionBar;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
-import android.content.ContentValues;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
-import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewParent;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
     @SuppressLint("Range")
@@ -56,13 +51,12 @@ public class MainActivity extends AppCompatActivity {
         //titleBar.setBackgroundDrawable(cd);
         //titleBar.setTitle(Html.fromHtml("<font color=\"" + Global.theme.getFg() + "\">" + Global.APP_NAME + "</font>"));
 
-        Button addTodoBt = findViewById(R.id.add_todo_bt);
-        addTodoBt.setBackgroundColor(Global.theme.getBgColor());
-        addTodoBt.setTextColor(Global.theme.getFgColor());
+        FloatingActionButton addTodoBt = findViewById(R.id.add_todo_bt);
+        addTodoBt.setBackgroundTintList(ColorStateList.valueOf(Global.theme.getFgColor()));
+        addTodoBt.setRippleColor(Global.theme.getHintColor());
 
         ListView todoList = findViewById(R.id.todo_list);
-        todoList.setBackgroundColor(Global.theme.getBgColor());
-
+        todoList.setBackgroundColor(Global.theme.getWindowBgColor());
 
 
 
@@ -81,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             int id;
             String title, subtask;
-            for (int i = 0, n = resultCounts; i < n; i++) {
+            for (int i = 0; i < resultCounts; i++) {
                 id = cursor.getInt(cursor.getColumnIndex("id"));
                 title = cursor.getString(cursor.getColumnIndex("title"));
                 subtask = cursor.getString(cursor.getColumnIndex("subtask"));
@@ -97,14 +91,12 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        addTodoBt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddTodoActivity.class);
-                intent.putExtra("fromPage", "MainActivity");
-                startActivity(intent);
-                MainActivity.this.finish();
-            }
+        addTodoBt.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, AddTodoActivity.class);
+            intent.putExtra("fromPage", "MainActivity");
+            startActivity(intent);
+            MainActivity.this.finish();
         });
+
     }
 }

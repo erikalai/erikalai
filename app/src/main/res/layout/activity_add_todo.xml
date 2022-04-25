@@ -12,12 +12,25 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:text="←"
-            android:id="@+id/add_todo_back_bt"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                android:text="←"
+                android:id="@+id/add_todo_back_bt"/>
+            <TextView
+                android:id="@+id/tv2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create Todo"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+
 
         <ScrollView
             android:layout_width="match_parent"
@@ -26,32 +39,106 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/title_et"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5pt"
+                    android:layout_width="match_parent"
+                    android:inputType="text"
+                    android:textSize="30sp"
+                    android:hint="title"/>
+
+                <Button
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5pt"
+                    android:layout_width="match_parent"
+                    android:id="@+id/datetime_bt"
+                    android:textSize="30sp"
+                    android:text="Set deadline"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
+                    android:layout_margin="5pt">
                     <TextView
+                        android:id="@+id/tv1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Title:"
-                        android:textSize="30sp"
-                        android:id="@+id/title_tv"/>
-
-                    <EditText
-                        android:layout_weight="1"
+                        android:text="Deadline: "
+                        android:textSize="23sp"/>
+                    <TextView
+                        android:id="@+id/datetime_tv"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="5pt"
-                        android:layout_width="match_parent"
-                        android:inputType="text"
-                        android:id="@+id/title_et"
-                        android:textSize="30sp"
-                        android:hint="title"/>
-
+                        android:text="None"
+                        android:textSize="23sp"/>
                 </LinearLayout>
+
+                <Button
+                    android:id="@+id/reminder_bt"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5pt"
+                    android:layout_width="match_parent"
+                    android:textSize="30sp"
+                    android:text="Set reminder"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5pt">
+                    <TextView
+                        android:id="@+id/tv3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Reminder: "
+                        android:textSize="23sp"/>
+                    <TextView
+                        android:id="@+id/reminder_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="23sp"/>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/importance_bt"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5pt"
+                    android:layout_width="match_parent"
+                    android:textSize="30sp"
+                    android:text="Set importance"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5pt">
+                    <TextView
+                        android:id="@+id/tv4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Importance: "
+                        android:textSize="23sp"/>
+                    <TextView
+                        android:id="@+id/importance_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="23sp"/>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/save_bt"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5pt"
+                    android:layout_width="match_parent"
+                    android:textSize="30sp"
+                    android:text="Save"/>
             </LinearLayout>
         </ScrollView>
 
