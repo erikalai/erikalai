@@ -13,7 +13,9 @@ public class ReminderBroadcast extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "Todo reminder");
         builder.setSmallIcon(R.drawable.ic_launcher_background);
         builder.setContentTitle(intent.getStringExtra("title"));
-        builder.setContentText(intent.getStringExtra("msg"));
+        //builder.setContentText(intent.getStringExtra("msg"));
+        builder.setStyle(new
+                NotificationCompat.BigTextStyle().bigText(intent.getStringExtra("msg")));
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);

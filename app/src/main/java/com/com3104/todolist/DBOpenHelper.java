@@ -26,8 +26,8 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         // create tables
         db.execSQL("create table todolistdefault (todo_id integer primary key autoincrement, title VARCHAR(50) not null);");
         db.execSQL("create table subtaskdefault (id integer primary key autoincrement, todo_id int not null, title varchar(50) not null, done boolean not null);");
-        db.execSQL("create table todolist (todo_id integer primary key autoincrement, title varchar(50) not null, deadline text, important int not null);");
-        db.execSQL("create table subtask (id integer primary key autoincrement, todo_id int not null, title varchar(50) not null, done boolean not null);");
+        db.execSQL("create table todolist (todo_id integer primary key autoincrement, title varchar(50) not null, deadline text, important int not null, note varchar(300));");
+        db.execSQL("create table subtask (id integer primary key autoincrement, todo_id int not null, title varchar(50) not null, note varchar(300), done boolean not null);");
     }
 
     @Override

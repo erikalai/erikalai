@@ -15,20 +15,23 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <Button
+
+            <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="30sp"
-                android:text="←"
+                android:textAllCaps="false"
+                android:src="@drawable/arrowsmallleft_48"
                 android:id="@+id/add_todo_back_bt"/>
+
             <TextView
                 android:id="@+id/tv2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Create Todo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="做野清單      "
                 android:textSize="30sp"
                 android:textStyle="bold"
-                android:layout_gravity="center_vertical"/>
+                android:gravity="center"/>
         </LinearLayout>
 
 
@@ -50,7 +53,7 @@
                     android:layout_width="match_parent"
                     android:inputType="text"
                     android:textSize="30sp"
-                    android:hint="title"/>
+                    android:hint="要做咩？"/>
 
                 <Button
                     android:layout_weight="1"
@@ -59,7 +62,8 @@
                     android:layout_width="match_parent"
                     android:id="@+id/datetime_bt"
                     android:textSize="30sp"
-                    android:text="Set deadline"/>
+                    android:textAllCaps="false"
+                    android:text="死期"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -69,13 +73,13 @@
                         android:id="@+id/tv1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Deadline: "
+                        android:text="死期："
                         android:textSize="23sp"/>
                     <TextView
                         android:id="@+id/datetime_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="None"
+                        android:text="冇"
                         android:textSize="23sp"/>
                 </LinearLayout>
 
@@ -86,7 +90,8 @@
                     android:layout_margin="5pt"
                     android:layout_width="match_parent"
                     android:textSize="30sp"
-                    android:text="Set reminder"/>
+                    android:textAllCaps="false"
+                    android:text="提提你"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -96,7 +101,7 @@
                         android:id="@+id/tv3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Reminder: "
+                        android:text="提提你："
                         android:textSize="23sp"/>
                     <TextView
                         android:id="@+id/reminder_tv"
@@ -112,7 +117,8 @@
                     android:layout_margin="5pt"
                     android:layout_width="match_parent"
                     android:textSize="30sp"
-                    android:text="Set importance"/>
+                    android:textAllCaps="false"
+                    android:text="重要性"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -122,7 +128,7 @@
                         android:id="@+id/tv4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Importance: "
+                        android:text="重要性："
                         android:textSize="23sp"/>
                     <TextView
                         android:id="@+id/importance_tv"
@@ -131,6 +137,26 @@
                         android:textSize="23sp"/>
                 </LinearLayout>
 
+                <TextView
+                    android:id="@+id/tv5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="有野要mark低："
+                    android:layout_margin="5pt"
+                    android:textSize="30sp"/>
+                <!--android:maxLines="10"-->
+                <EditText
+                    android:id="@+id/note_et"
+                    android:inputType="textMultiLine"
+                    android:lines="16"
+                    android:minLines="6"
+                    android:gravity="top|start"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:scrollbars="vertical"
+                    android:layout_margin="5pt"
+                    android:textSize="23sp"/>
+
                 <Button
                     android:id="@+id/save_bt"
                     android:layout_weight="1"
@@ -138,7 +164,8 @@
                     android:layout_margin="5pt"
                     android:layout_width="match_parent"
                     android:textSize="30sp"
-                    android:text="Save"/>
+                    android:textAllCaps="false"
+                    android:text="Save低"/>
             </LinearLayout>
         </ScrollView>
 

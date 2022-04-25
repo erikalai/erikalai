@@ -15,6 +15,7 @@ import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -35,7 +37,7 @@ import java.util.Random;
 
 public class AddTodoActivity extends AppCompatActivity {
     private Calendar date = null;
-    private EditText titleEt;
+    private EditText titleEt, noteEt;
     private int reminderIndex = 0;
     private int importanceIndex = 0;
     private boolean setDate = false;
@@ -67,24 +69,26 @@ public class AddTodoActivity extends AppCompatActivity {
 
 
 
-        Button backBt = findViewById(R.id.add_todo_back_bt);
+        ImageButton backBt = findViewById(R.id.add_todo_back_bt);
         backBt.setBackgroundColor(Global.theme.getBgColor());
-        backBt.setTextColor(Global.theme.getFgColor());
+        backBt.setColorFilter(Global.theme.getBtFgColor());
+        //backBt.setTextColor(Global.theme.getFgColor());
 
         titleEt = findViewById(R.id.title_et);
         titleEt.setTextColor(Global.theme.getFgColor());
         titleEt.setHintTextColor(Global.theme.getHintColor());
+        titleEt.setBackgroundTintList(ColorStateList.valueOf(Global.theme.getFgColor()));
 
         Button datetimeBt = findViewById(R.id.datetime_bt);
         datetimeBt.setBackgroundColor(Global.theme.getBgColor());
-        datetimeBt.setTextColor(Global.theme.getFgColor());
+        datetimeBt.setTextColor(Global.theme.getBtFgColor());
 
         TextView datetimeTv = findViewById(R.id.datetime_tv);
         datetimeTv.setTextColor(Global.theme.getFgColor());
 
         Button reminderBt = findViewById(R.id.reminder_bt);
         reminderBt.setBackgroundColor(Global.theme.getBgColor());
-        reminderBt.setTextColor(Global.theme.getFgColor());
+        reminderBt.setTextColor(Global.theme.getBtFgColor());
 
         TextView reminderTv = findViewById(R.id.reminder_tv);
         reminderTv.setTextColor(Global.theme.getFgColor());
@@ -92,15 +96,20 @@ public class AddTodoActivity extends AppCompatActivity {
 
         Button importanceBt = findViewById(R.id.importance_bt);
         importanceBt.setBackgroundColor(Global.theme.getBgColor());
-        importanceBt.setTextColor(Global.theme.getFgColor());
+        importanceBt.setTextColor(Global.theme.getBtFgColor());
 
         TextView importanceTv = findViewById(R.id.importance_tv);
         importanceTv.setTextColor(Global.theme.getFgColor());
         importanceTv.setText(Global.importance[importanceIndex]);
 
+        noteEt = findViewById(R.id.note_et);
+        noteEt.setTextColor(Global.theme.getFgColor());
+        noteEt.setHintTextColor(Global.theme.getHintColor());
+        noteEt.setBackgroundTintList(ColorStateList.valueOf(Global.theme.getFgColor()));
+
         Button saveBt = findViewById(R.id.save_bt);
         saveBt.setBackgroundColor(Global.theme.getBgColor());
-        saveBt.setTextColor(Global.theme.getFgColor());
+        saveBt.setTextColor(Global.theme.getBtFgColor());
 
 
 
@@ -108,13 +117,17 @@ public class AddTodoActivity extends AppCompatActivity {
         tv1.setTextColor(Global.theme.getFgColor());
 
         TextView tv2 = findViewById(R.id.tv2);
-        tv2.setTextColor(Global.theme.getFgColor());
+        tv2.setTextColor(Global.theme.getBtFgColor());
+        tv2.setBackgroundColor(Global.theme.getBgColor());
 
         TextView tv3 = findViewById(R.id.tv3);
         tv3.setTextColor(Global.theme.getFgColor());
 
         TextView tv4 = findViewById(R.id.tv4);
         tv4.setTextColor(Global.theme.getFgColor());
+
+        TextView tv5 = findViewById(R.id.tv5);
+        tv5.setTextColor(Global.theme.getHintColor());
 
 
 
@@ -130,7 +143,7 @@ public class AddTodoActivity extends AppCompatActivity {
 
         datetimeBt.setOnClickListener(v -> {
             setDate = false;
-            datetimeTv.setText("None");
+            datetimeTv.setText("冇");
             final Calendar currentDate = Calendar.getInstance();
             date = Calendar.getInstance();
             new DatePickerDialog(AddTodoActivity.this, new DatePickerDialog.OnDateSetListener() {
@@ -145,10 +158,10 @@ public class AddTodoActivity extends AppCompatActivity {
                             date.set(Calendar.SECOND, 0);
                             date.set(Calendar.MILLISECOND, 0);
                             setDate = true;
-                            DateFormat dtf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                            DateFormat dtf1 = new SimpleDateFormat("yyyy-MM-dd");
+                            DateFormat dtf2 = new SimpleDateFormat("HH:mm");
 
-                            datetimeTv.setText(dtf.format(date.getTime()));
-                            //Log.v("DEBUG", "The choosen one: " + dtf.format(date.getTime()));
+                            datetimeTv.setText(Utils.formatChineseDate(dtf1.format(date.getTime())) + " " + dtf2.format(date.getTime()));
                         }
                     }, currentDate.get(Calendar.HOUR_OF_DAY), currentDate.get(Calendar.MINUTE), false).show();
                 }
@@ -156,14 +169,14 @@ public class AddTodoActivity extends AppCompatActivity {
         });
 
         reminderBt.setOnClickListener(v -> {
-            new AlertDialog.Builder(this).setTitle("Reminder").setItems(Global.reminder, (dialogInterface, i) -> {
+            new AlertDialog.Builder(this).setTitle("提提你").setItems(Global.reminderQ, (dialogInterface, i) -> {
                 reminderIndex = i;
                 reminderTv.setText(Global.reminder[reminderIndex]);
             }).show();
         });
 
         importanceBt.setOnClickListener(v -> {
-            new AlertDialog.Builder(this).setTitle("Importance").setItems(Global.importance, (dialogInterface, i) -> {
+            new AlertDialog.Builder(this).setTitle("重要性").setItems(Global.importanceQ, (dialogInterface, i) -> {
                 importanceIndex = i;
                 importanceTv.setText(Global.importance[importanceIndex]);
             }).show();
@@ -189,15 +202,24 @@ public class AddTodoActivity extends AppCompatActivity {
                 contentValues.put("deadline", dtf.format(date.getTime()));
             }
             contentValues.put("important", importanceIndex);
+            if (noteEt != null) {
+                contentValues.put("note", noteEt.getText().toString().trim());
+            }
             Global.myDb.insertData("todolist", contentValues);
 
 
             if (setDate && (date != null) && (reminderIndex != 0)) {
                 // reminder notification
                 Intent intent2 = new Intent(AddTodoActivity.this, ReminderBroadcast.class);
-                intent2.putExtra("title", "Reminder");
-                DateFormat dtf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                intent2.putExtra("msg", "Deadline of " + title + ": " + dtf.format(date.getTime()));
+                intent2.putExtra("title", "提提你");
+                DateFormat dtf1 = new SimpleDateFormat("yyyy-MM-dd");
+                DateFormat dtf2 = new SimpleDateFormat("HH:mm");
+                if (reminderIndex == 1) {
+                    // 即刻提你
+                    intent2.putExtra("msg", Global.importancePrefix[importanceIndex] + title + "死期到！");
+                } else {
+                    intent2.putExtra("msg", "，" + Global.importancePrefix[importanceIndex] + title + "仲有" + Global.reminder[reminderIndex] + "就死期到！\n死期：" + Utils.formatChineseDate(dtf1.format(date.getTime())) + " " + dtf2.format(date.getTime()));
+                }
                 int id = new Random().nextInt(543250);
                 intent2.putExtra("id", Integer.toString(id));
                 intent2.setAction("dummy_action_" + id);

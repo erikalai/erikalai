@@ -8,8 +8,8 @@ import android.os.Build;
 public class Global {
     public static final String APP_NAME = "TODO List";
     public static final Theme[] THEMES = new Theme[] {
-            new Theme("Dark", "#000000", "#333333", "#999999", "#FFFFFF"),
-            new Theme("White", "#EEEEEE", "#999999", "#333333", "#000000")
+            new Theme("活力黃", "#FFFFFF", "#FFC11E", "#FFC11E", "#606060", "#000000"),
+            new Theme("神秘黑", "#FFFFFF", "#FFC11E", "#FFC11E", "#606060", "#000000")
     };
     public static Theme theme;
 
@@ -18,17 +18,31 @@ public class Global {
     public static DBOpenHelper myDb;
 
     public static String[] reminder = new String[] {
-            "None",
-            "By the time",
-            "5 minutes before",
-            "10 minutes before",
-            "15 minutes before",
-            "30 minutes before",
-            "1 hour before",
-            "2 hours before",
-            "1 day before",
-            "2 days before",
-            "1 week before"
+            "冇",
+            "即刻提你",
+            "5分鐘前",
+            "10分鐘前",
+            "15分鐘前",
+            "30分鐘前",
+            "1粒鐘前",
+            "2粒鐘前",
+            "1日前",
+            "2日前",
+            "1禮拜前"
+    };
+
+    public static String[] reminderQ = new String[] {
+            "冇？",
+            "即刻提你？",
+            "5分鐘前？",
+            "10分鐘前？",
+            "15分鐘前？",
+            "30分鐘前？",
+            "1粒鐘前？",
+            "2粒鐘前？",
+            "1日前？",
+            "2日前？",
+            "1禮拜前？"
     };
 
     public static long reminderDelay[] = new long[] {
@@ -46,9 +60,17 @@ public class Global {
     };
 
     public static String[] importance = new String[] {
-            "Normal",
-            "❗Important❗",
-            "‼️Very important‼️"
+            "無關痛癢",
+            "好似重要",
+            "❗重要❗",
+            "⚠️好很重要⚠️️"
+    };
+
+    public static String[] importanceQ = new String[] {
+            "無關痛癢❔",
+            "好似重要❔",
+            "❗重要❗❔",
+            "⚠️好很重要⚠️️❔"
     };
 
     public static String[] importancePrefix = new String[] {

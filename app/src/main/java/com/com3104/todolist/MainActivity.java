@@ -16,6 +16,8 @@ import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button themeBt = findViewById(R.id.theme_bt);
         themeBt.setBackgroundColor(Global.theme.getBgColor());
-        themeBt.setTextColor(Global.theme.getFgColor());
+        themeBt.setTextColor(Global.theme.getBtFgColor());
 
         todoLv = findViewById(R.id.todo_lv);
         todoLv.setBackgroundColor(Global.theme.getWindowBgColor());
@@ -111,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         themeBt.setOnClickListener(v -> {
-            new AlertDialog.Builder(this).setTitle("Theme").setItems(Global.getThemeNames(), (dialogInterface, i) -> {
+            new AlertDialog.Builder(this).setTitle("主題色").setItems(Global.getThemeNames(), (dialogInterface, i) -> {
                 Global.theme = Global.THEMES[i];
                 SharedPreferences.Editor editor = Global.sharedPreferences.edit();
                 editor.putInt("Theme", i);
@@ -130,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
             MainActivity.this.finish();
         });
 
-        ArrayList<String> todos = new ArrayList<>();
+        ArrayList<Spanned> todos = new ArrayList<>();
         ArrayList<Integer> todoIDs = new ArrayList<>();
 
         cursor = Global.myDb.query("select todo_id, title, important, date(deadline) deadline_date, time(deadline) deadline_time from todolist order by case when deadline_date is null then 1 else 0 end, deadline_date, deadline_time, important desc;");
@@ -148,17 +150,17 @@ public class MainActivity extends AppCompatActivity {
                 deadlineTime = cursor.getString(cursor.getColumnIndex("deadline_time"));
                 if (deadlineDate == null || deadlineTime == null) {
                     // no deadline
-                    todos.add(Global.importancePrefix[important] + title);
+                    todos.add(Html.fromHtml(Global.importancePrefix[important] + "<font color=\"" + Global.theme.getBtFg() + "\">" + title + "</font>"));
                 } else {
                     // have deadline
-                    todos.add("(" + deadlineDate + " " + deadlineTime + ")\n" + Global.importancePrefix[important] + title);
+                    todos.add(Html.fromHtml(Global.importancePrefix[important] + "<font color=\"" + Global.theme.getBtFg() + "\">" + title + "</font><br>(" + Utils.formatChineseDate(deadlineDate) + " " + deadlineTime + ")"));
                 }
                 todoIDs.add(id);
                 cursor.moveToNext();
             }
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+        ArrayAdapter<Spanned> adapter = new ArrayAdapter<Spanned>(
                 MainActivity.this, R.layout.todo_listview, todos) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
