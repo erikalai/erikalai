@@ -13,15 +13,25 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
+    ListView todoLv;
+
+
     @SuppressLint("Range")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +69,10 @@ public class MainActivity extends AppCompatActivity {
         themeBt.setBackgroundColor(Global.theme.getBgColor());
         themeBt.setTextColor(Global.theme.getFgColor());
 
-        ListView todoList = findViewById(R.id.todo_list);
-        todoList.setBackgroundColor(Global.theme.getWindowBgColor());
+        todoLv = findViewById(R.id.todo_lv);
+        todoLv.setBackgroundColor(Global.theme.getWindowBgColor());
+        todoLv.setDivider(new ColorDrawable(Global.theme.getFgColor()));
+        todoLv.setDividerHeight(12);
 
         FloatingActionButton addTodoBt = findViewById(R.id.add_todo_bt);
         addTodoBt.setBackgroundTintList(ColorStateList.valueOf(Global.theme.getFgColor()));
@@ -117,6 +129,49 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             MainActivity.this.finish();
         });
+
+        ArrayList<String> todos = new ArrayList<>();
+        ArrayList<Integer> todoIDs = new ArrayList<>();
+
+        cursor = Global.myDb.query("select todo_id, title, important, date(deadline) deadline_date, time(deadline) deadline_time from todolist order by case when deadline_date is null then 1 else 0 end, deadline_date, deadline_time, important desc;");
+        resultCounts = cursor.getCount();
+        if (resultCounts == 0 || !cursor.moveToFirst()) {
+            // no data
+        } else {
+            int id, important;
+            String title, deadlineDate, deadlineTime;
+            for (int i = 0; i < resultCounts; i++) {
+                id = cursor.getInt(cursor.getColumnIndex("todo_id"));
+                title = cursor.getString(cursor.getColumnIndex("title"));
+                important = cursor.getInt(cursor.getColumnIndex("important"));
+                deadlineDate = cursor.getString(cursor.getColumnIndex("deadline_date"));
+                deadlineTime = cursor.getString(cursor.getColumnIndex("deadline_time"));
+                if (deadlineDate == null || deadlineTime == null) {
+                    // no deadline
+                    todos.add(Global.importancePrefix[important] + title);
+                } else {
+                    // have deadline
+                    todos.add("(" + deadlineDate + " " + deadlineTime + ")\n" + Global.importancePrefix[important] + title);
+                }
+                todoIDs.add(id);
+                cursor.moveToNext();
+            }
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                MainActivity.this, R.layout.todo_listview, todos) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+
+                TextView textView = (TextView) view.findViewById(R.id.text1);
+
+                textView.setTextColor(Global.theme.getFgColor());
+
+                return view;
+            }
+        };
+        todoLv.setAdapter(adapter);
 
     }
 }

@@ -143,6 +143,7 @@ public class AddTodoActivity extends AppCompatActivity {
                             date.set(Calendar.HOUR_OF_DAY, hourOfDay);
                             date.set(Calendar.MINUTE, minute);
                             date.set(Calendar.SECOND, 0);
+                            date.set(Calendar.MILLISECOND, 0);
                             setDate = true;
                             DateFormat dtf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
@@ -183,7 +184,7 @@ public class AddTodoActivity extends AppCompatActivity {
             // save to database
             ContentValues contentValues = new ContentValues();
             contentValues.put("title", title);
-            if (setDate && date != null) {
+            if (setDate && (date != null)) {
                 DateFormat dtf = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS.SSS");
                 contentValues.put("deadline", dtf.format(date.getTime()));
             }
@@ -191,7 +192,7 @@ public class AddTodoActivity extends AppCompatActivity {
             Global.myDb.insertData("todolist", contentValues);
 
 
-            if (setDate && date != null && reminderIndex != 0) {
+            if (setDate && (date != null) && (reminderIndex != 0)) {
                 // reminder notification
                 Intent intent2 = new Intent(AddTodoActivity.this, ReminderBroadcast.class);
                 intent2.putExtra("title", "Reminder");

@@ -51,6 +51,12 @@ public class Global {
             "‼️Very important‼️"
     };
 
+    public static String[] importancePrefix = new String[] {
+            "",
+            "❗",
+            "‼️"
+    };
+
 
     public static String[] getThemeNames() {
         int n = THEMES.length;
