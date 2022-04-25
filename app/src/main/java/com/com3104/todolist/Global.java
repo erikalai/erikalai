@@ -13,7 +13,7 @@ public class Global {
     };
     public static Theme theme;
 
-    public static SharedPreferences sharedPreferences;
+    public static SharedPreferences sharedPreferences = null;
 
     public static DBOpenHelper myDb;
 
@@ -50,4 +50,14 @@ public class Global {
             "❗Important❗",
             "‼️Very important‼️"
     };
+
+
+    public static String[] getThemeNames() {
+        int n = THEMES.length;
+        String[] names = new String[n];
+        for (int i = 0; i < n; i++) {
+            names[i] = THEMES[i].getName();
+        }
+        return names;
+    }
 }

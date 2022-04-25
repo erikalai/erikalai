@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -15,6 +16,7 @@ import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -26,7 +28,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         Global.sharedPreferences = getSharedPreferences("MyProfile", Context.MODE_PRIVATE);
+
 
         int themeID = Global.sharedPreferences.getInt("Theme", -1);
         if (themeID == -1) {
@@ -51,14 +55,17 @@ public class MainActivity extends AppCompatActivity {
         //titleBar.setBackgroundDrawable(cd);
         //titleBar.setTitle(Html.fromHtml("<font color=\"" + Global.theme.getFg() + "\">" + Global.APP_NAME + "</font>"));
 
-        FloatingActionButton addTodoBt = findViewById(R.id.add_todo_bt);
-        addTodoBt.setBackgroundTintList(ColorStateList.valueOf(Global.theme.getFgColor()));
-        addTodoBt.setRippleColor(Global.theme.getHintColor());
+        Button themeBt = findViewById(R.id.theme_bt);
+        themeBt.setBackgroundColor(Global.theme.getBgColor());
+        themeBt.setTextColor(Global.theme.getFgColor());
 
         ListView todoList = findViewById(R.id.todo_list);
         todoList.setBackgroundColor(Global.theme.getWindowBgColor());
 
-
+        FloatingActionButton addTodoBt = findViewById(R.id.add_todo_bt);
+        addTodoBt.setBackgroundTintList(ColorStateList.valueOf(Global.theme.getFgColor()));
+        addTodoBt.setRippleColor(Global.theme.getHintColor());
+        addTodoBt.setColorFilter(Global.theme.getWindowBgColor());
 
 
         // database
@@ -90,6 +97,19 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+        themeBt.setOnClickListener(v -> {
+            new AlertDialog.Builder(this).setTitle("Theme").setItems(Global.getThemeNames(), (dialogInterface, i) -> {
+                Global.theme = Global.THEMES[i];
+                SharedPreferences.Editor editor = Global.sharedPreferences.edit();
+                editor.putInt("Theme", i);
+                editor.commit();
+
+                Intent intent1 = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent1);
+                MainActivity.this.finish();
+            }).show();
+        });
 
         addTodoBt.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, AddTodoActivity.class);
