@@ -1,21 +1,27 @@
 package com.com3104.todolist;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.SharedPreferences;
-import android.os.Build;
+
+import java.util.ArrayList;
 
 public class Global {
     public static final String APP_NAME = "記低";
     public static final Theme[] THEMES = new Theme[] {
             new Theme("活力黃", "#FFFFFF", "#FFC11E", "#FFC11E", "#606060", "#000000"),
-            new Theme("神秘黑", "#FFFFFF", "#FFC11E", "#FFC11E", "#606060", "#000000")
+            new Theme("神秘黑", "#000000", "#000000", "#000000", "#606060", "#FFC11E")
     };
     public static Theme theme;
 
     public static SharedPreferences sharedPreferences = null;
 
     public static DBOpenHelper myDb;
+
+    public static ArrayList<String> todos = new ArrayList<>();
+    public static ArrayList<Integer> todoIDs = new ArrayList<>();
+    public static ArrayList<ArrayList<Subtask>> todoSubtasks = new ArrayList<>();
+
+
+
 
     public static String[] reminder = new String[] {
             "冇",
@@ -70,14 +76,14 @@ public class Global {
             "輕鬆搞掂❔",
             "好似重要❔",
             "❗重要❗❔",
-            "⚠️好很重要⚠️️❔"
+            "‼️️好很重要‼️️️❔"
     };
 
     public static String[] importancePrefix = new String[] {
             "",
+            "",
             "❗",
-            "‼️",
-            "⚠"
+            "‼️"
     };
 
 

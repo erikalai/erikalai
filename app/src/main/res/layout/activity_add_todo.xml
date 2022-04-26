@@ -253,7 +253,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5pt"
                     android:layout_marginRight="5pt"
-                    android:layout_marginTop="25pt"
+                    android:layout_marginTop="65pt"
                     android:layout_width="match_parent"
                     android:textSize="30sp"
                     android:textAllCaps="false"

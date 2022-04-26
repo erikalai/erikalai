@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
         // background color
         ConstraintLayout window = findViewById(R.id.main_activity_window);
-        window.setBackgroundColor(Global.theme.getWindowBgColor());
+        window.setBackgroundColor(Global.theme.getBgColor());
 
         // title bar color
         //ActionBar titleBar;
@@ -83,13 +84,20 @@ public class MainActivity extends AppCompatActivity {
         themeBt.setTextColor(Global.theme.getBtFgColor());
 
         todoLv = findViewById(R.id.todo_lv);
-        todoLv.setBackgroundColor(Global.theme.getWindowBgColor());
-        todoLv.setDivider(new ColorDrawable(Global.theme.getFgColor()));
+        todoLv.setBackgroundColor(Global.theme.getBgColor());
+        todoLv.setDivider(new ColorDrawable(Color.parseColor("#CCCCCC")));
         todoLv.setDividerHeight(12);
-        todoLv.setChildDivider(new ColorDrawable(Global.theme.getFgColor()));
+        todoLv.setChildDivider(new ColorDrawable(Color.parseColor("#CCCCCC")));
+        todoLv.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                Log.d("DEBUG", Global.todos.get(groupPosition) + " " + Global.todoSubtasks.get(groupPosition).get(childPosition).getTitle());
+                return false;
+            }
+        });
 
         FloatingActionButton addTodoBt = findViewById(R.id.add_todo_bt);
-        addTodoBt.setBackgroundTintList(ColorStateList.valueOf(Global.theme.getFgColor()));
+        addTodoBt.setBackgroundTintList(ColorStateList.valueOf(Global.theme.getBtFgColor()));
         addTodoBt.setRippleColor(Global.theme.getHintColor());
         addTodoBt.setColorFilter(Global.theme.getWindowBgColor());
 
@@ -146,9 +154,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //ArrayList<Spanned> todos = new ArrayList<>();
-        ArrayList<String> todos = new ArrayList<>();
-        ArrayList<Integer> todoIDs = new ArrayList<>();
-        ArrayList<ArrayList<Subtask>> todoSubtasks = new ArrayList<>();
+        Global.todos = new ArrayList<>();
+        Global.todoIDs = new ArrayList<>();
+        Global.todoSubtasks = new ArrayList<>();
 
         arCategory = new ArrayList<>();
         arSubCategory = new ArrayList<>();
@@ -172,18 +180,18 @@ public class MainActivity extends AppCompatActivity {
                 important = cursor.getInt(cursor.getColumnIndex("important"));
                 deadlineDate = cursor.getString(cursor.getColumnIndex("deadline_date"));
                 deadlineTime = cursor.getString(cursor.getColumnIndex("deadline_time"));
-                if (!todoIDs.contains(id)) {
+                if (!Global.todoIDs.contains(id)) {
                     if (deadlineDate == null || deadlineTime == null) {
                         // no deadline
                         //todos.add(Html.fromHtml(Global.importancePrefix[important] + "<font color=\"" + Global.theme.getBtFg() + "\">" + title + "</font>"));
-                        todos.add(Global.importancePrefix[important] + title);
+                        Global.todos.add(Global.importancePrefix[important] + title);
                     } else {
                         // have deadline
                         //todos.add(Html.fromHtml(Global.importancePrefix[important] + "<font color=\"" + Global.theme.getBtFg() + "\">" + title + "</font><br>(" + Utils.formatChineseDate(deadlineDate) + " " + deadlineTime + ")"));
-                        todos.add(Global.importancePrefix[important] + title + "\n(" + Utils.formatChineseDate(deadlineDate) + " " + deadlineTime + ")");
+                        Global.todos.add(Global.importancePrefix[important] + title + "\n(" + Utils.formatChineseDate(deadlineDate) + " " + deadlineTime + ")");
                     }
                 }
-                if (!todoIDs.contains(id)) {
+                if (!Global.todoIDs.contains(id)) {
                     tempSubtasks = new ArrayList<>();
                 }
 
@@ -201,9 +209,9 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("DEBUG", title + " length: " + tempSubtasks.size());
 
 
-                if (!todoIDs.contains(id)) {
-                    todoIDs.add(id);
-                    todoSubtasks.add(tempSubtasks);
+                if (!Global.todoIDs.contains(id)) {
+                    Global.todoIDs.add(id);
+                    Global.todoSubtasks.add(tempSubtasks);
                 }
 
                 cursor.moveToNext();
@@ -228,19 +236,20 @@ public class MainActivity extends AppCompatActivity {
         */
 
 
-        for (int i = 0, n = todoIDs.size(); i < n; i++) {
+        for (int i = 0, n = Global.todoIDs.size(); i < n; i++) {
+            Log.d("DEBUG", "Global.todos.get(" + i + "): " + Global.todos.get(i));
             DataItem dataItem = new DataItem();
             dataItem.setCategoryId(Integer.toString(i+1));
-            dataItem.setCategoryName(todos.get(i));
+            dataItem.setCategoryName(Global.todos.get(i));
 
             arSubCategory = new ArrayList<>();
-            for (int j = 0, m = todoSubtasks.get(i).size(); j < m; j++) {
+            for (int j = 0, m = Global.todoSubtasks.get(i).size(); j < m; j++) {
                 SubCategoryItem subCategoryItem = new SubCategoryItem();
-                subCategoryItem.setCategoryId(String.valueOf(todoSubtasks.get(i).get(j).getID()));
+                subCategoryItem.setCategoryId(String.valueOf(Global.todoSubtasks.get(i).get(j).getID()));
                 subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
-                subCategoryItem.setSubCategoryName(todoSubtasks.get(i).get(j).getTitle()); //TODO
+                subCategoryItem.setSubCategoryName(Global.todoSubtasks.get(i).get(j).getTitle());
                 arSubCategory.add(subCategoryItem);
-                Log.d("DEBUG", "arSubCategory[" + todos.get(i) + "].add(" + todoSubtasks.get(i).get(j).getTitle() + ");");
+                Log.d("DEBUG", "arSubCategory[" + Global.todos.get(i) + "].add(" + Global.todoSubtasks.get(i).get(j).getTitle() + ");");
             }
 
             dataItem.setSubCategory(arSubCategory);
@@ -252,16 +261,16 @@ public class MainActivity extends AppCompatActivity {
             ArrayList<HashMap<String, String>> childArrayList = new ArrayList<>();
             HashMap<String, String> mapParent = new HashMap<>();
 
-            mapParent.put(ConstantManager.Parameter.CATEGORY_ID,data.getCategoryId());
-            mapParent.put(ConstantManager.Parameter.CATEGORY_NAME,data.getCategoryName());
+            mapParent.put(ConstantManager.Parameter.CATEGORY_ID, data.getCategoryId());
+            mapParent.put(ConstantManager.Parameter.CATEGORY_NAME, data.getCategoryName());
 
             int countIsChecked = 0;
             for (SubCategoryItem subCategoryItem : data.getSubCategory()) {
                 HashMap<String, String> mapChild = new HashMap<>();
-                mapChild.put(ConstantManager.Parameter.SUB_ID,subCategoryItem.getSubId());
-                mapChild.put(ConstantManager.Parameter.SUB_CATEGORY_NAME,subCategoryItem.getSubCategoryName());
-                mapChild.put(ConstantManager.Parameter.CATEGORY_ID,subCategoryItem.getCategoryId());
-                mapChild.put(ConstantManager.Parameter.IS_CHECKED,subCategoryItem.getIsChecked());
+                mapChild.put(ConstantManager.Parameter.SUB_ID, subCategoryItem.getSubId());
+                mapChild.put(ConstantManager.Parameter.SUB_CATEGORY_NAME, subCategoryItem.getSubCategoryName());
+                mapChild.put(ConstantManager.Parameter.CATEGORY_ID, subCategoryItem.getCategoryId());
+                mapChild.put(ConstantManager.Parameter.IS_CHECKED, subCategoryItem.getIsChecked());
 
                 if (subCategoryItem.getIsChecked().equalsIgnoreCase(ConstantManager.CHECK_BOX_CHECKED_TRUE)) {
                     countIsChecked++;

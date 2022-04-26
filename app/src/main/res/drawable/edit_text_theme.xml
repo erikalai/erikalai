@@ -11,6 +11,7 @@
         android:top="2dp" />
     <corners android:radius="2dp" />
     <solid
+        android:id="@+id/edit_text_theme_color"
         android:color="@color/colorWhite"
         android:alpha="0.3"/>
 </shape>

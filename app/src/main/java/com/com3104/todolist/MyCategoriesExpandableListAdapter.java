@@ -2,6 +2,7 @@ package com.com3104.todolist;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,10 +78,10 @@ public class MyCategoriesExpandableListAdapter extends BaseExpandableListAdapter
 
             if (isFromMyCategoriesFragment) {
                 convertView = inflater.inflate(R.layout.group_list_layout_my_categories, null);
-                ((TextView)convertView.findViewById(R.id.tvMainCategoryName)).setTextColor(Global.theme.getFgColor());
+                ((TextView)convertView.findViewById(R.id.tvMainCategoryName)).setTextColor(Global.theme.getBtFgColor());
             } else {
                 convertView = inflater.inflate(R.layout.group_list_layout_choose_categories, null);
-                ((TextView)convertView.findViewById(R.id.tvMainCategoryName)).setTextColor(Global.theme.getFgColor());
+                ((TextView)convertView.findViewById(R.id.tvMainCategoryName)).setTextColor(Global.theme.getBtFgColor());
             }
             viewHolderParent = new ViewHolderParent();
 
@@ -110,14 +111,15 @@ public class MyCategoriesExpandableListAdapter extends BaseExpandableListAdapter
                     for (int i = 0; i < childItems.get(groupPosition).size(); i++) {
                         childItems.get(groupPosition).get(i).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_TRUE);
                     }
+                    Log.d("DEBUG", "Group checkbox: " + groupPosition + " check");
                     notifyDataSetChanged();
 
-                }
-                else {
+                } else {
                     parentItems.get(groupPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
                     for (int i = 0; i < childItems.get(groupPosition).size(); i++) {
                         childItems.get(groupPosition).get(i).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
                     }
+                    Log.d("DEBUG", "Group checkbox: " + groupPosition + " uncheck");
                     notifyDataSetChanged();
                 }
             }
@@ -133,13 +135,14 @@ public class MyCategoriesExpandableListAdapter extends BaseExpandableListAdapter
 
     @Override
     public View getChildView(final int groupPosition, final int childPosition, final boolean b, View convertView, ViewGroup viewGroup) {
-
         final ViewHolderChild viewHolderChild;
         child = childItems.get(groupPosition).get(childPosition);
 
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.child_list_layout_choose_category, null);
             ((TextView)convertView.findViewById(R.id.tvSubCategoryName)).setTextColor(Global.theme.getFgColor());
+
+
             convertView.findViewById(R.id.viewDivider).setBackgroundColor(Global.theme.getFgColor());
             viewHolderChild = new ViewHolderChild();
 
@@ -166,10 +169,12 @@ public class MyCategoriesExpandableListAdapter extends BaseExpandableListAdapter
                 if (viewHolderChild.cbSubCategory.isChecked()) {
                     count = 0;
                     childItems.get(groupPosition).get(childPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_TRUE);
+                    Log.d("DEBUG", "checkbox: " + groupPosition + " " + childPosition + " check");
                     notifyDataSetChanged();
                 } else {
                     count = 0;
                     childItems.get(groupPosition).get(childPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
+                    Log.d("DEBUG", "checkbox: " + groupPosition + " " + childPosition + " uncheck");
                     notifyDataSetChanged();
                 }
 
@@ -197,7 +202,7 @@ public class MyCategoriesExpandableListAdapter extends BaseExpandableListAdapter
 
     @Override
     public boolean isChildSelectable(int i, int i1) {
-        return false;
+        return true;
     }
     @Override
     public void onGroupCollapsed(int groupPosition) {
