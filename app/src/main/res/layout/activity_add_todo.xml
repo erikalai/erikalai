@@ -144,7 +144,7 @@
                     android:text="有野要mark低："
                     android:layout_margin="5pt"
                     android:textSize="30sp"/>
-                <!--android:maxLines="10"-->
+
                 <EditText
                     android:id="@+id/note_et"
                     android:inputType="textMultiLine"
@@ -156,6 +156,69 @@
                     android:scrollbars="vertical"
                     android:layout_margin="5pt"
                     android:textSize="23sp"/>
+
+
+                <!-- subtask -->
+                <TextView
+                    android:id="@+id/tv6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Subtask："
+                    android:layout_margin="5pt"
+                    android:textSize="30sp"/>
+
+                <EditText
+                    android:id="@+id/subtask_title_et"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5pt"
+                    android:layout_width="match_parent"
+                    android:inputType="text"
+                    android:textSize="30sp"
+                    android:hint="subtask"/>
+
+                <EditText
+                    android:id="@+id/subtask_note_et"
+                    android:inputType="textMultiLine"
+                    android:lines="16"
+                    android:minLines="6"
+                    android:gravity="top|start"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:scrollbars="vertical"
+                    android:layout_margin="5pt"
+                    android:textSize="23sp"/>
+
+                <Button
+                    android:id="@+id/add_subtask_bt"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5pt"
+                    android:layout_width="match_parent"
+                    android:textSize="30sp"
+                    android:textAllCaps="false"
+                    android:text="加入"/>
+
+                <TextView
+                    android:id="@+id/tv7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Subtasks："
+                    android:layout_margin="5pt"
+                    android:textSize="30sp"/>
+
+
+                <TextView
+                    android:id="@+id/subtask_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:layout_margin="5pt"
+                    android:textSize="23sp"/>
+
+
+
+
 
                 <Button
                     android:id="@+id/save_bt"

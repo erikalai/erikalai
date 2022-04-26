@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 
 public class Global {
-    public static final String APP_NAME = "TODO List";
+    public static final String APP_NAME = "記低";
     public static final Theme[] THEMES = new Theme[] {
             new Theme("活力黃", "#FFFFFF", "#FFC11E", "#FFC11E", "#606060", "#000000"),
             new Theme("神秘黑", "#FFFFFF", "#FFC11E", "#FFC11E", "#606060", "#000000")
@@ -60,14 +60,14 @@ public class Global {
     };
 
     public static String[] importance = new String[] {
-            "無關痛癢",
+            "輕鬆搞掂",
             "好似重要",
             "❗重要❗",
             "⚠️好很重要⚠️️"
     };
 
     public static String[] importanceQ = new String[] {
-            "無關痛癢❔",
+            "輕鬆搞掂❔",
             "好似重要❔",
             "❗重要❗❔",
             "⚠️好很重要⚠️️❔"
