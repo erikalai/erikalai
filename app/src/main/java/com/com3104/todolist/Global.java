@@ -76,7 +76,8 @@ public class Global {
     public static String[] importancePrefix = new String[] {
             "",
             "❗",
-            "‼️"
+            "‼️",
+            "⚠"
     };
 
 

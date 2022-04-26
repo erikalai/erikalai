@@ -75,10 +75,12 @@ public class MyCategoriesExpandableListAdapter extends BaseExpandableListAdapter
          final ViewHolderParent viewHolderParent;
         if (convertView == null) {
 
-            if(isFromMyCategoriesFragment) {
+            if (isFromMyCategoriesFragment) {
                 convertView = inflater.inflate(R.layout.group_list_layout_my_categories, null);
-            }else {
+                ((TextView)convertView.findViewById(R.id.tvMainCategoryName)).setTextColor(Global.theme.getFgColor());
+            } else {
                 convertView = inflater.inflate(R.layout.group_list_layout_choose_categories, null);
+                ((TextView)convertView.findViewById(R.id.tvMainCategoryName)).setTextColor(Global.theme.getFgColor());
             }
             viewHolderParent = new ViewHolderParent();
 
@@ -137,6 +139,8 @@ public class MyCategoriesExpandableListAdapter extends BaseExpandableListAdapter
 
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.child_list_layout_choose_category, null);
+            ((TextView)convertView.findViewById(R.id.tvSubCategoryName)).setTextColor(Global.theme.getFgColor());
+            convertView.findViewById(R.id.viewDivider).setBackgroundColor(Global.theme.getFgColor());
             viewHolderChild = new ViewHolderChild();
 
             viewHolderChild.tvSubCategoryName = convertView.findViewById(R.id.tvSubCategoryName);

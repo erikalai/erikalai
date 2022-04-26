@@ -86,11 +86,13 @@ public class MainActivity extends AppCompatActivity {
         todoLv.setBackgroundColor(Global.theme.getWindowBgColor());
         todoLv.setDivider(new ColorDrawable(Global.theme.getFgColor()));
         todoLv.setDividerHeight(12);
+        todoLv.setChildDivider(new ColorDrawable(Global.theme.getFgColor()));
 
         FloatingActionButton addTodoBt = findViewById(R.id.add_todo_bt);
         addTodoBt.setBackgroundTintList(ColorStateList.valueOf(Global.theme.getFgColor()));
         addTodoBt.setRippleColor(Global.theme.getHintColor());
         addTodoBt.setColorFilter(Global.theme.getWindowBgColor());
+
 
 
         // database
@@ -162,21 +164,27 @@ public class MainActivity extends AppCompatActivity {
             Integer subtaskID = null;
             String title, subtaskTitle, subtaskNote, deadlineDate, deadlineTime;
             boolean subtaskDone;
+            ArrayList<Subtask> tempSubtasks = new ArrayList<>();
+            Log.d("DEBUG", "resultCounts: " + resultCounts);
             for (int i = 0; i < resultCounts; i++) {
-                ArrayList<Subtask> tempSubtasks = new ArrayList<>();
                 id = cursor.getInt(cursor.getColumnIndex("todo_id"));
                 title = cursor.getString(cursor.getColumnIndex("title"));
                 important = cursor.getInt(cursor.getColumnIndex("important"));
                 deadlineDate = cursor.getString(cursor.getColumnIndex("deadline_date"));
                 deadlineTime = cursor.getString(cursor.getColumnIndex("deadline_time"));
-                if (deadlineDate == null || deadlineTime == null) {
-                    // no deadline
-                    //todos.add(Html.fromHtml(Global.importancePrefix[important] + "<font color=\"" + Global.theme.getBtFg() + "\">" + title + "</font>"));
-                    todos.add(Global.importancePrefix[important] + title);
-                } else {
-                    // have deadline
-                    //todos.add(Html.fromHtml(Global.importancePrefix[important] + "<font color=\"" + Global.theme.getBtFg() + "\">" + title + "</font><br>(" + Utils.formatChineseDate(deadlineDate) + " " + deadlineTime + ")"));
-                    todos.add(Global.importancePrefix[important] + title + "\n(" + Utils.formatChineseDate(deadlineDate) + " " + deadlineTime + ")");
+                if (!todoIDs.contains(id)) {
+                    if (deadlineDate == null || deadlineTime == null) {
+                        // no deadline
+                        //todos.add(Html.fromHtml(Global.importancePrefix[important] + "<font color=\"" + Global.theme.getBtFg() + "\">" + title + "</font>"));
+                        todos.add(Global.importancePrefix[important] + title);
+                    } else {
+                        // have deadline
+                        //todos.add(Html.fromHtml(Global.importancePrefix[important] + "<font color=\"" + Global.theme.getBtFg() + "\">" + title + "</font><br>(" + Utils.formatChineseDate(deadlineDate) + " " + deadlineTime + ")"));
+                        todos.add(Global.importancePrefix[important] + title + "\n(" + Utils.formatChineseDate(deadlineDate) + " " + deadlineTime + ")");
+                    }
+                }
+                if (!todoIDs.contains(id)) {
+                    tempSubtasks = new ArrayList<>();
                 }
 
                 // subtask
@@ -188,13 +196,16 @@ public class MainActivity extends AppCompatActivity {
                     subtaskNote = cursor.getString(cursor.getColumnIndex("subtask_note"));
                     subtaskDone = cursor.getInt(cursor.getColumnIndex("subtask_done")) > 0;
 
-                    tempSubtasks.add(new Subtask(subtaskTitle, subtaskNote, subtaskDone));
+                    tempSubtasks.add(new Subtask(subtaskID, subtaskTitle, subtaskNote, subtaskDone));
+                }
+                Log.d("DEBUG", title + " length: " + tempSubtasks.size());
+
+
+                if (!todoIDs.contains(id)) {
+                    todoIDs.add(id);
+                    todoSubtasks.add(tempSubtasks);
                 }
 
-
-
-                todoIDs.add(id);
-                todoSubtasks.add(tempSubtasks);
                 cursor.moveToNext();
             }
         }
@@ -221,11 +232,62 @@ public class MainActivity extends AppCompatActivity {
             DataItem dataItem = new DataItem();
             dataItem.setCategoryId(Integer.toString(i+1));
             dataItem.setCategoryName(todos.get(i));
+
+            arSubCategory = new ArrayList<>();
+            for (int j = 0, m = todoSubtasks.get(i).size(); j < m; j++) {
+                SubCategoryItem subCategoryItem = new SubCategoryItem();
+                subCategoryItem.setCategoryId(String.valueOf(todoSubtasks.get(i).get(j).getID()));
+                subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
+                subCategoryItem.setSubCategoryName(todoSubtasks.get(i).get(j).getTitle()); //TODO
+                arSubCategory.add(subCategoryItem);
+                Log.d("DEBUG", "arSubCategory[" + todos.get(i) + "].add(" + todoSubtasks.get(i).get(j).getTitle() + ");");
+            }
+
+            dataItem.setSubCategory(arSubCategory);
+            arCategory.add(dataItem);
         }
 
 
-    }
+        for (DataItem data : arCategory) {
+            ArrayList<HashMap<String, String>> childArrayList = new ArrayList<>();
+            HashMap<String, String> mapParent = new HashMap<>();
 
+            mapParent.put(ConstantManager.Parameter.CATEGORY_ID,data.getCategoryId());
+            mapParent.put(ConstantManager.Parameter.CATEGORY_NAME,data.getCategoryName());
+
+            int countIsChecked = 0;
+            for (SubCategoryItem subCategoryItem : data.getSubCategory()) {
+                HashMap<String, String> mapChild = new HashMap<>();
+                mapChild.put(ConstantManager.Parameter.SUB_ID,subCategoryItem.getSubId());
+                mapChild.put(ConstantManager.Parameter.SUB_CATEGORY_NAME,subCategoryItem.getSubCategoryName());
+                mapChild.put(ConstantManager.Parameter.CATEGORY_ID,subCategoryItem.getCategoryId());
+                mapChild.put(ConstantManager.Parameter.IS_CHECKED,subCategoryItem.getIsChecked());
+
+                if (subCategoryItem.getIsChecked().equalsIgnoreCase(ConstantManager.CHECK_BOX_CHECKED_TRUE)) {
+                    countIsChecked++;
+                }
+                childArrayList.add(mapChild);
+            }
+
+            if (countIsChecked == data.getSubCategory().size()) {
+                data.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_TRUE);
+            } else {
+                data.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
+            }
+
+            mapParent.put(ConstantManager.Parameter.IS_CHECKED,data.getIsChecked());
+            childItems.add(childArrayList);
+            parentItems.add(mapParent);
+
+        }
+
+        ConstantManager.parentItems = parentItems;
+        ConstantManager.childItems = childItems;
+
+        myCategoriesExpandableListAdapter = new MyCategoriesExpandableListAdapter(this,parentItems,childItems,false);
+        todoLv.setAdapter(myCategoriesExpandableListAdapter);
+
+    }
 
     
 }

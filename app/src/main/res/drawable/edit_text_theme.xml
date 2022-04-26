@@ -10,6 +10,7 @@
         android:right="2dp"
         android:top="2dp" />
     <corners android:radius="2dp" />
-    <solid android:color="@color/colorWhite"
+    <solid
+        android:color="@color/colorWhite"
         android:alpha="0.3"/>
 </shape>
