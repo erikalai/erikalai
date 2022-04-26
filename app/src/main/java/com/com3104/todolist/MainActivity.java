@@ -23,15 +23,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.com3104.todolist.Model.DataItem;
+import com.com3104.todolist.Model.SubCategoryItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
-    ListView todoLv;
+    ExpandableListView todoLv;
+
+    ArrayList<DataItem> arCategory;
+    ArrayList<SubCategoryItem> arSubCategory;
+    ArrayList<ArrayList<SubCategoryItem>> arSubCategoryFinal;
+
+    ArrayList<HashMap<String, String>> parentItems;
+    ArrayList<ArrayList<HashMap<String, String>>> childItems;
+    MyCategoriesExpandableListAdapter myCategoriesExpandableListAdapter;
 
     @SuppressLint("Range")
     @Override
@@ -131,17 +143,27 @@ public class MainActivity extends AppCompatActivity {
             MainActivity.this.finish();
         });
 
-        ArrayList<Spanned> todos = new ArrayList<>();
+        //ArrayList<Spanned> todos = new ArrayList<>();
+        ArrayList<String> todos = new ArrayList<>();
         ArrayList<Integer> todoIDs = new ArrayList<>();
+        ArrayList<ArrayList<Subtask>> todoSubtasks = new ArrayList<>();
 
-        cursor = Global.myDb.query("select todo_id, title, important, date(deadline) deadline_date, time(deadline) deadline_time from todolist order by case when deadline_date is null then 1 else 0 end, deadline_date, deadline_time, important desc;");
+        arCategory = new ArrayList<>();
+        arSubCategory = new ArrayList<>();
+        parentItems = new ArrayList<>();
+        childItems = new ArrayList<>();
+
+        cursor = Global.myDb.query("select TL.todo_id todo_id, TL.title title, TL.important important, date(TL.deadline) deadline_date, time(TL.deadline) deadline_time, ST.id subtask_id, ST.title subtask_title, ST.note subtask_note, ST.done subtask_done from todolist TL left join subtask ST on TL.todo_id=ST.todo_id order by case when deadline_date is null then 1 else 0 end, deadline_date, deadline_time, important desc, title, subtask_id;");
         resultCounts = cursor.getCount();
         if (resultCounts == 0 || !cursor.moveToFirst()) {
             // no data
         } else {
             int id, important;
-            String title, deadlineDate, deadlineTime;
+            Integer subtaskID = null;
+            String title, subtaskTitle, subtaskNote, deadlineDate, deadlineTime;
+            boolean subtaskDone;
             for (int i = 0; i < resultCounts; i++) {
+                ArrayList<Subtask> tempSubtasks = new ArrayList<>();
                 id = cursor.getInt(cursor.getColumnIndex("todo_id"));
                 title = cursor.getString(cursor.getColumnIndex("title"));
                 important = cursor.getInt(cursor.getColumnIndex("important"));
@@ -149,16 +171,35 @@ public class MainActivity extends AppCompatActivity {
                 deadlineTime = cursor.getString(cursor.getColumnIndex("deadline_time"));
                 if (deadlineDate == null || deadlineTime == null) {
                     // no deadline
-                    todos.add(Html.fromHtml(Global.importancePrefix[important] + "<font color=\"" + Global.theme.getBtFg() + "\">" + title + "</font>"));
+                    //todos.add(Html.fromHtml(Global.importancePrefix[important] + "<font color=\"" + Global.theme.getBtFg() + "\">" + title + "</font>"));
+                    todos.add(Global.importancePrefix[important] + title);
                 } else {
                     // have deadline
-                    todos.add(Html.fromHtml(Global.importancePrefix[important] + "<font color=\"" + Global.theme.getBtFg() + "\">" + title + "</font><br>(" + Utils.formatChineseDate(deadlineDate) + " " + deadlineTime + ")"));
+                    //todos.add(Html.fromHtml(Global.importancePrefix[important] + "<font color=\"" + Global.theme.getBtFg() + "\">" + title + "</font><br>(" + Utils.formatChineseDate(deadlineDate) + " " + deadlineTime + ")"));
+                    todos.add(Global.importancePrefix[important] + title + "\n(" + Utils.formatChineseDate(deadlineDate) + " " + deadlineTime + ")");
                 }
+
+                // subtask
+                // subtaskID == null if no subtask
+                int index = cursor.getColumnIndexOrThrow("subtask_id");
+                if (!cursor.isNull(index)) {
+                    subtaskID = cursor.getInt(index);
+                    subtaskTitle = cursor.getString(cursor.getColumnIndex("subtask_title"));
+                    subtaskNote = cursor.getString(cursor.getColumnIndex("subtask_note"));
+                    subtaskDone = cursor.getInt(cursor.getColumnIndex("subtask_done")) > 0;
+
+                    tempSubtasks.add(new Subtask(subtaskTitle, subtaskNote, subtaskDone));
+                }
+
+
+
                 todoIDs.add(id);
+                todoSubtasks.add(tempSubtasks);
                 cursor.moveToNext();
             }
         }
 
+        /*
         ArrayAdapter<Spanned> adapter = new ArrayAdapter<Spanned>(
                 MainActivity.this, R.layout.todo_listview, todos) {
             @Override
@@ -173,6 +214,15 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         todoLv.setAdapter(adapter);
+        */
+
+
+        for (int i = 0, n = todoIDs.size(); i < n; i++) {
+            DataItem dataItem = new DataItem();
+            dataItem.setCategoryId(Integer.toString(i+1));
+            dataItem.setCategoryName(todos.get(i));
+        }
+
 
     }
 

@@ -141,7 +141,7 @@
                     android:id="@+id/tv5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="有野要mark低："
+                    android:text="有咩詳情呢？"
                     android:layout_margin="5pt"
                     android:textSize="30sp"/>
 
@@ -149,7 +149,7 @@
                     android:id="@+id/note_et"
                     android:inputType="textMultiLine"
                     android:lines="16"
-                    android:minLines="6"
+                    android:minLines="1"
                     android:gravity="top|start"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
@@ -159,43 +159,59 @@
 
 
                 <!-- subtask -->
+
                 <TextView
                     android:id="@+id/tv6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Subtask："
-                    android:layout_margin="5pt"
-                    android:textSize="30sp"/>
+                    android:text="子任務："
+                    android:layout_marginLeft="25pt"
+                    android:layout_marginRight="5pt"
+                    android:textSize="26sp"/>
+
 
                 <EditText
                     android:id="@+id/subtask_title_et"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5pt"
+                    android:layout_marginLeft="23.5pt"
+                    android:layout_marginRight="5pt"
                     android:layout_width="match_parent"
                     android:inputType="text"
-                    android:textSize="30sp"
-                    android:hint="subtask"/>
+                    android:textSize="26sp"
+                    android:hint="内容打喺度"/>
+
+                <TextView
+                    android:id="@+id/tv8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="仲有咩詳情？"
+                    android:layout_marginLeft="25pt"
+                    android:layout_marginRight="5pt"
+                    android:textSize="26sp"/>
 
                 <EditText
                     android:id="@+id/subtask_note_et"
                     android:inputType="textMultiLine"
                     android:lines="16"
-                    android:minLines="6"
+                    android:minLines="2"
                     android:gravity="top|start"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:scrollbars="vertical"
-                    android:layout_margin="5pt"
+                    android:layout_marginLeft="25pt"
+                    android:layout_marginRight="5pt"
                     android:textSize="23sp"/>
 
                 <Button
                     android:id="@+id/add_subtask_bt"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5pt"
+                    android:layout_marginLeft="25pt"
+                    android:layout_marginRight="5pt"
+                    android:layout_marginTop="5pt"
                     android:layout_width="match_parent"
-                    android:textSize="30sp"
+                    android:textSize="26sp"
                     android:textAllCaps="false"
                     android:text="加入"/>
 
@@ -203,18 +219,29 @@
                     android:id="@+id/tv7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Subtasks："
-                    android:layout_margin="5pt"
-                    android:textSize="30sp"/>
+                    android:text="任務列表："
+                    android:layout_marginLeft="25pt"
+                    android:layout_marginRight="5pt"
+                    android:layout_marginTop="5pt"
+                    android:textSize="26sp"/>
 
-
+                <!--
                 <TextView
                     android:id="@+id/subtask_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
-                    android:layout_margin="5pt"
+                    android:layout_marginLeft="25pt"
+                    android:layout_marginRight="5pt"
                     android:textSize="23sp"/>
+                -->
+                <TableLayout
+                    android:id="@+id/subtask_tl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25.5pt"
+                    android:layout_marginRight="5pt">
+                </TableLayout>
 
 
 
@@ -224,7 +251,9 @@
                     android:id="@+id/save_bt"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5pt"
+                    android:layout_marginLeft="5pt"
+                    android:layout_marginRight="5pt"
+                    android:layout_marginTop="25pt"
                     android:layout_width="match_parent"
                     android:textSize="30sp"
                     android:textAllCaps="false"

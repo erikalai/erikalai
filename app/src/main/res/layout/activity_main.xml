@@ -30,10 +30,20 @@
         </LinearLayout>
 
 
+        <!--
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/todo_lv"
+            android:layout_weight="100"/>
+        -->
+        <ExpandableListView
+            android:id="@+id/todo_lv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:childDivider="@color/colorBlack"
+            android:divider="@null"
+            android:dividerHeight="0dp"
             android:layout_weight="100"/>
 
 

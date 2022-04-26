@@ -23,15 +23,18 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -129,11 +132,11 @@ public class AddTodoActivity extends AppCompatActivity {
         subtaskNoteEt.setBackgroundTintList(ColorStateList.valueOf(Global.theme.getFgColor()));
 
         Button addSubtaskBt = findViewById(R.id.add_subtask_bt);
-        addSubtaskBt.setBackgroundColor(Global.theme.getBgColor());
-        addSubtaskBt.setTextColor(Global.theme.getBtFgColor());
+        addSubtaskBt.setBackgroundColor(Global.theme.getFgColor());
+        addSubtaskBt.setTextColor(Global.theme.getBgColor());
 
-        subtaskTv = findViewById(R.id.subtask_tv);
-        subtaskTv.setTextColor(Global.theme.getFgColor());
+        //subtaskTv = findViewById(R.id.subtask_tv);
+        //subtaskTv.setTextColor(Global.theme.getFgColor());
 
         Button saveBt = findViewById(R.id.save_bt);
         saveBt.setBackgroundColor(Global.theme.getBgColor());
@@ -162,6 +165,9 @@ public class AddTodoActivity extends AppCompatActivity {
 
         TextView tv7 = findViewById(R.id.tv7);
         tv7.setTextColor(Global.theme.getHintColor());
+
+        TextView tv8 = findViewById(R.id.tv8);
+        tv8.setTextColor(Global.theme.getHintColor());
 
 
 
@@ -231,15 +237,43 @@ public class AddTodoActivity extends AppCompatActivity {
             }
 
             // add to subtasks
-            subtasks.add(new Subtask(subtaskTitle, subtaskNote));
+            subtasks.add(new Subtask(subtaskTitle, subtaskNote, false));
 
             // load subtasks
             ArrayList<String> temp = Utils.getSubtasksTitles(subtasks);
+            /*
             String temp2 = "";
             for (int i = 0; i < temp.size(); i++) {
                 temp2 += (i == 0 ? "" : "\n") + temp.get(i);
             }
             subtaskTv.setText(temp2);
+            */
+
+
+            TableLayout table = (TableLayout)AddTodoActivity.this.findViewById(R.id.subtask_tl);
+
+            // reset TableLayout
+            while (table.getChildCount() >= 1) {
+                table.removeViewAt(0);
+            }
+
+            for (int i = 0; i < temp.size(); i++) {
+                // Inflate your row "template" and fill out the fields.
+                TableRow row = (TableRow) LayoutInflater.from(AddTodoActivity.this).inflate(R.layout.add_todo_subtask_row, null);
+                ((TextView)row.findViewById(R.id.tv)).setText(Html.fromHtml("&nbsp;" + temp.get(i) + (subtasks.get(i).getNote() != null ? "<br>&nbsp;<small>" + subtasks.get(i).getNote().replaceAll("\n", "</small><br>&nbsp;<small>") + "</small>" : "")));
+                ((TextView)row.findViewById(R.id.tv)).setTextColor(Global.theme.getFgColor());
+
+                ((CheckBox)row.findViewById(R.id.cb)).setChecked(subtasks.get(i).getDone());
+                int finalI = i;
+                ((CheckBox)row.findViewById(R.id.cb)).setOnClickListener(view -> {
+                    subtasks.get(finalI).setDone(!subtasks.get(finalI).getDone());
+                });
+
+                table.addView(row);
+            }
+            table.requestLayout();
+
+
 
             // clear input
             subtaskTitleEt.setText("");
@@ -287,7 +321,7 @@ public class AddTodoActivity extends AppCompatActivity {
                 if (subtasks.get(i).getNote() != null) {
                     contentValues.put("note", subtasks.get(i).getNote());
                 }
-                contentValues.put("done", false);
+                contentValues.put("done", subtasks.get(i).getDone());
                 Global.myDb.insertData("subtask", contentValues);
             }
 
