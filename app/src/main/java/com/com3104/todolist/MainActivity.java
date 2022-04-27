@@ -2,7 +2,9 @@ package com.com3104.todolist;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -15,6 +17,7 @@ import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
@@ -68,9 +71,9 @@ public class MainActivity extends AppCompatActivity {
         // set theme according to SharedPreferences
         Global.theme = Global.THEMES[themeID];
 
-        // background color
+        // window background color
         ConstraintLayout window = findViewById(R.id.main_activity_window);
-        window.setBackgroundColor(Global.theme.getBgColor());
+        window.setBackgroundColor(Global.theme.getColor("main_activity_window"));
 
         // title bar color
         //ActionBar titleBar;
@@ -80,14 +83,14 @@ public class MainActivity extends AppCompatActivity {
         //titleBar.setTitle(Html.fromHtml("<font color=\"" + Global.theme.getFg() + "\">" + Global.APP_NAME + "</font>"));
 
         Button themeBt = findViewById(R.id.theme_bt);
-        themeBt.setBackgroundColor(Global.theme.getBgColor());
-        themeBt.setTextColor(Global.theme.getBtFgColor());
+        themeBt.setBackgroundColor(Global.theme.getColor("theme_bt_bg"));
+        themeBt.setTextColor(Global.theme.getColor("theme_bt_fg"));
 
         todoLv = findViewById(R.id.todo_lv);
-        todoLv.setBackgroundColor(Global.theme.getBgColor());
-        todoLv.setDivider(new ColorDrawable(Color.parseColor("#CCCCCC")));
+        todoLv.setBackgroundColor(Global.theme.getColor("todo_lv_bg"));
+        todoLv.setDivider(new ColorDrawable(Global.theme.getColor("todo_lv_divider")));
         todoLv.setDividerHeight(12);
-        todoLv.setChildDivider(new ColorDrawable(Color.parseColor("#CCCCCC")));
+        todoLv.setChildDivider(new ColorDrawable(Global.theme.getColor("todo_lv_divider")));
         todoLv.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
@@ -97,11 +100,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         FloatingActionButton addTodoBt = findViewById(R.id.add_todo_bt);
-        addTodoBt.setBackgroundTintList(ColorStateList.valueOf(Global.theme.getBtFgColor()));
-        addTodoBt.setRippleColor(Global.theme.getHintColor());
-        addTodoBt.setColorFilter(Global.theme.getWindowBgColor());
+        addTodoBt.setBackgroundTintList(ColorStateList.valueOf(Global.theme.getColor("add_todo_bt_bg")));
+        addTodoBt.setRippleColor(Global.theme.getColor("add_todo_bt_ripple"));
+        addTodoBt.setColorFilter(Global.theme.getColor("add_todo_bt_filter"));
 
-
+        Drawable unwrappedDrawable = AppCompatResources.getDrawable(this, R.drawable.edit_text_theme);
+        Drawable wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable);
+        DrawableCompat.setTint(wrappedDrawable, Global.theme.getColor("edit_text_theme"));
 
         // database
         Global.myDb = new DBOpenHelper(this);

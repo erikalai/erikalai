@@ -2,6 +2,8 @@ package com.com3104.todolist;
 
 import android.graphics.Color;
 
+import java.util.HashMap;
+
 public class Theme {
     private String name;
     private String windowBg;
@@ -9,8 +11,14 @@ public class Theme {
     private String fg;
     private String hint;
     private String btFg;
+    private HashMap<String, String> color;
 
     public Theme() {}
+
+    public Theme(String name, HashMap<String, String> color) {
+        this.name = name;
+        this.color = color;
+    }
 
     public Theme(String name, String windowBg, String bg, String hint, String fg, String btFg) {
         this.name = name;
@@ -45,6 +53,8 @@ public class Theme {
         return btFg;
     }
 
+
+
     public int getWindowBgColor() {
         return Color.parseColor(windowBg);
     }
@@ -63,5 +73,13 @@ public class Theme {
 
     public int getBtFgColor() {
         return Color.parseColor(btFg);
+    }
+
+    public int getColor(String color) {
+        return Color.parseColor(this.color.get(color));
+    }
+
+    public String getColorCode(String color) {
+        return this.color.get(color);
     }
 }

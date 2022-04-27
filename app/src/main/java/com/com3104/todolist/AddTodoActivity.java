@@ -68,7 +68,7 @@ public class AddTodoActivity extends AppCompatActivity {
 
         // background color
         ConstraintLayout window = findViewById(R.id.add_todo_activity_window);
-        window.setBackgroundColor(Global.theme.getWindowBgColor());
+        window.setBackgroundColor(Global.theme.getColor("add_todo_activity_window"));
 
         // title bar color
         //ActionBar titleBar;
@@ -84,90 +84,89 @@ public class AddTodoActivity extends AppCompatActivity {
 
 
         ImageButton backBt = findViewById(R.id.add_todo_back_bt);
-        backBt.setBackgroundColor(Global.theme.getBgColor());
-        backBt.setColorFilter(Global.theme.getBtFgColor());
-        //backBt.setTextColor(Global.theme.getFgColor());
+        backBt.setBackgroundColor(Global.theme.getColor("add_todo_back_bt_bg"));
+        backBt.setColorFilter(Global.theme.getColor("add_todo_back_bt_filter"));
 
         titleEt = findViewById(R.id.title_et);
-        titleEt.setTextColor(Global.theme.getFgColor());
-        titleEt.setHintTextColor(Global.theme.getHintColor());
-        titleEt.setBackgroundTintList(ColorStateList.valueOf(Global.theme.getFgColor()));
+        titleEt.setTextColor(Global.theme.getColor("title_et_fg"));
+        titleEt.setHintTextColor(Global.theme.getColor("title_et_hint"));
+        titleEt.setBackgroundTintList(ColorStateList.valueOf(Global.theme.getColor("title_et_bg")));
 
         Button datetimeBt = findViewById(R.id.datetime_bt);
-        datetimeBt.setBackgroundColor(Global.theme.getBgColor());
-        datetimeBt.setTextColor(Global.theme.getBtFgColor());
+        datetimeBt.setBackgroundColor(Global.theme.getColor("datetime_bt_bg"));
+        datetimeBt.setTextColor(Global.theme.getColor("datetime_bt_fg"));
 
         TextView datetimeTv = findViewById(R.id.datetime_tv);
-        datetimeTv.setTextColor(Global.theme.getFgColor());
+        datetimeTv.setTextColor(Global.theme.getColor("datetime_tv"));
 
         Button reminderBt = findViewById(R.id.reminder_bt);
-        reminderBt.setBackgroundColor(Global.theme.getBgColor());
-        reminderBt.setTextColor(Global.theme.getBtFgColor());
+        reminderBt.setBackgroundColor(Global.theme.getColor("reminder_bt_bg"));
+        reminderBt.setTextColor(Global.theme.getColor("reminder_bt_fg"));
 
         TextView reminderTv = findViewById(R.id.reminder_tv);
-        reminderTv.setTextColor(Global.theme.getFgColor());
+        reminderTv.setTextColor(Global.theme.getColor("reminder_tv"));
         reminderTv.setText(Global.reminder[reminderIndex]);
 
         Button importanceBt = findViewById(R.id.importance_bt);
-        importanceBt.setBackgroundColor(Global.theme.getBgColor());
-        importanceBt.setTextColor(Global.theme.getBtFgColor());
+        importanceBt.setBackgroundColor(Global.theme.getColor("importance_bt_bg"));
+        importanceBt.setTextColor(Global.theme.getColor("importance_bt_fg"));
 
         TextView importanceTv = findViewById(R.id.importance_tv);
-        importanceTv.setTextColor(Global.theme.getFgColor());
+        importanceTv.setTextColor(Global.theme.getColor("importance_tv"));
         importanceTv.setText(Global.importance[importanceIndex]);
 
         noteEt = findViewById(R.id.note_et);
-        noteEt.setTextColor(Global.theme.getFgColor());
-        noteEt.setHintTextColor(Global.theme.getHintColor());
-        noteEt.setBackgroundTintList(ColorStateList.valueOf(Global.theme.getFgColor()));
+        noteEt.setTextColor(Global.theme.getColor("note_et_fg"));
+        noteEt.setHintTextColor(Global.theme.getColor("note_et_hint"));
+        noteEt.setBackgroundTintList(ColorStateList.valueOf(Global.theme.getColor("note_et_bg")));
 
         subtaskTitleEt = findViewById(R.id.subtask_title_et);
-        subtaskTitleEt.setTextColor(Global.theme.getFgColor());
-        subtaskTitleEt.setHintTextColor(Global.theme.getHintColor());
-        subtaskTitleEt.setBackgroundTintList(ColorStateList.valueOf(Global.theme.getFgColor()));
+        subtaskTitleEt.setTextColor(Global.theme.getColor("subtask_title_et_fg"));
+        subtaskTitleEt.setHintTextColor(Global.theme.getColor("subtask_title_et_hint"));
+        subtaskTitleEt.setBackgroundTintList(ColorStateList.valueOf(Global.theme.getColor("subtask_title_et_bg")));
 
         subtaskNoteEt = findViewById(R.id.subtask_note_et);
-        subtaskNoteEt.setTextColor(Global.theme.getFgColor());
-        subtaskNoteEt.setHintTextColor(Global.theme.getHintColor());
-        subtaskNoteEt.setBackgroundTintList(ColorStateList.valueOf(Global.theme.getFgColor()));
+        subtaskNoteEt.setTextColor(Global.theme.getColor("subtask_note_et_fg"));
+        subtaskNoteEt.setHintTextColor(Global.theme.getColor("subtask_note_et_hint"));
+        subtaskNoteEt.setBackgroundTintList(ColorStateList.valueOf(Global.theme.getColor("subtask_note_et_bg")));
 
         Button addSubtaskBt = findViewById(R.id.add_subtask_bt);
-        addSubtaskBt.setBackgroundColor(Global.theme.getFgColor());
-        addSubtaskBt.setTextColor(Global.theme.getBgColor());
+        addSubtaskBt.setBackgroundColor(Global.theme.getColor("add_subtask_bt_bg"));
+        addSubtaskBt.setTextColor(Global.theme.getColor("add_subtask_bt_fg"));
 
         //subtaskTv = findViewById(R.id.subtask_tv);
         //subtaskTv.setTextColor(Global.theme.getFgColor());
 
         Button saveBt = findViewById(R.id.save_bt);
-        saveBt.setBackgroundColor(Global.theme.getBgColor());
-        saveBt.setTextColor(Global.theme.getBtFgColor());
+        saveBt.setBackgroundColor(Global.theme.getColor("save_bt_bg"));
+        saveBt.setTextColor(Global.theme.getColor("save_bt_fg"));
 
 
 
         TextView tv1 = findViewById(R.id.tv1);
-        tv1.setTextColor(Global.theme.getFgColor());
+        tv1.setTextColor(Global.theme.getColor("tv_fg"));
 
         TextView tv2 = findViewById(R.id.tv2);
-        tv2.setTextColor(Global.theme.getBtFgColor());
-        tv2.setBackgroundColor(Global.theme.getBgColor());
+        tv2.setTextColor(Global.theme.getColor("tv2_fg"));
+        tv2.setBackgroundColor(Global.theme.getColor("tv2_bg"));
 
         TextView tv3 = findViewById(R.id.tv3);
-        tv3.setTextColor(Global.theme.getFgColor());
+        tv3.setTextColor(Global.theme.getColor("tv_fg"));
 
         TextView tv4 = findViewById(R.id.tv4);
-        tv4.setTextColor(Global.theme.getFgColor());
+        tv4.setTextColor(Global.theme.getColor("tv_fg"));
 
         TextView tv5 = findViewById(R.id.tv5);
-        tv5.setTextColor(Global.theme.getHintColor());
+        tv5.setTextColor(Global.theme.getColor("tv_hint"));
 
         TextView tv6 = findViewById(R.id.tv6);
-        tv6.setTextColor(Global.theme.getHintColor());
+        tv6.setTextColor(Global.theme.getColor("tv_hint"));
 
         TextView tv7 = findViewById(R.id.tv7);
-        tv7.setTextColor(Global.theme.getHintColor());
+        tv7.setTextColor(Global.theme.getColor("tv_hint"));
 
         TextView tv8 = findViewById(R.id.tv8);
-        tv8.setTextColor(Global.theme.getHintColor());
+        tv8.setTextColor(Global.theme.getColor("tv_hint"));
 
 
 
@@ -260,8 +259,7 @@ public class AddTodoActivity extends AppCompatActivity {
             for (int i = 0; i < temp.size(); i++) {
                 // Inflate your row "template" and fill out the fields.
                 TableRow row = (TableRow) LayoutInflater.from(AddTodoActivity.this).inflate(R.layout.add_todo_subtask_row, null);
-                ((TextView)row.findViewById(R.id.tv)).setText(Html.fromHtml("&nbsp;" + temp.get(i) + (subtasks.get(i).getNote() != null ? "<br>&nbsp;<small>" + subtasks.get(i).getNote().replaceAll("\n", "</small><br>&nbsp;<small>") + "</small>" : "")));
-                ((TextView)row.findViewById(R.id.tv)).setTextColor(Global.theme.getFgColor());
+                ((TextView)row.findViewById(R.id.tv)).setText(Html.fromHtml("&nbsp;<font color=\"" + Global.theme.getColorCode("add_todo_subtask_title") + "\">" + temp.get(i) + "</font>" + (subtasks.get(i).getNote() != null ? "<br>&nbsp;<small><font color=\"" + Global.theme.getColorCode("add_todo_subtask_note") + "\">" + subtasks.get(i).getNote().replaceAll("\n", "</font></small><br>&nbsp;<small><font color=\"" + Global.theme.getColorCode("add_todo_subtask_note") + "\">") + "</font></small>" : "")));
 
                 ((CheckBox)row.findViewById(R.id.cb)).setChecked(subtasks.get(i).getDone());
                 int finalI = i;
