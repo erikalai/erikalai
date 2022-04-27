@@ -3,6 +3,7 @@ package com.com3104.todolist;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
@@ -17,22 +18,29 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -103,6 +111,59 @@ public class AddTodoActivity extends AppCompatActivity {
         reminderBt.setBackgroundColor(Global.theme.getColor("reminder_bt_bg"));
         reminderBt.setTextColor(Global.theme.getColor("reminder_bt_fg"));
 
+
+        /*
+        LinearLayout reminderLl = findViewById(R.id.reminder_ll);
+        reminderLl.setBackgroundColor(Global.theme.getColor("reminder_ll"));
+
+        Spinner reminderS = findViewById(R.id.reminder_s);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                R.layout.spinner_item, Global.reminder) {
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+
+                ((TextView) v).setTextSize(30);
+                ((TextView) v).setTextColor(Color.BLACK);
+
+                return v;
+            }
+
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View v = super.getDropDownView(position, convertView, parent);
+                v.setBackgroundColor(Global.theme.getColor("theme_s_bg"));
+                ((TextView) v).setTextColor(Global.theme.getColor("theme_s_fg"));
+                ((TextView) v).setTextSize(30);
+                ((TextView) v).setGravity(Gravity.CENTER);
+
+                return v;
+            }
+        };
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        reminderS.getBackground().setColorFilter(ContextCompat.getColor(this,
+                R.color.black), PorterDuff.Mode.SRC_ATOP);
+
+        reminderS.setAdapter(adapter);
+        reminderS.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("DEBUG", position+"");
+                reminderIndex = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        ImageView reminderSArrow = findViewById(R.id.reminder_s_arrow);
+        reminderSArrow.setOnClickListener(v -> {
+            reminderS.performClick();
+        });
+        */
+
+
+
         TextView reminderTv = findViewById(R.id.reminder_tv);
         reminderTv.setTextColor(Global.theme.getColor("reminder_tv"));
         reminderTv.setText(Global.reminder[reminderIndex]);
@@ -156,17 +217,17 @@ public class AddTodoActivity extends AppCompatActivity {
         TextView tv4 = findViewById(R.id.tv4);
         tv4.setTextColor(Global.theme.getColor("tv_fg"));
 
-        TextView tv5 = findViewById(R.id.tv5);
-        tv5.setTextColor(Global.theme.getColor("tv_hint"));
+        //TextView tv5 = findViewById(R.id.tv5);
+        //tv5.setTextColor(Global.theme.getColor("tv_hint"));
 
-        TextView tv6 = findViewById(R.id.tv6);
-        tv6.setTextColor(Global.theme.getColor("tv_hint"));
+        //TextView tv6 = findViewById(R.id.tv6);
+        //tv6.setTextColor(Global.theme.getColor("tv_hint"));
 
         TextView tv7 = findViewById(R.id.tv7);
         tv7.setTextColor(Global.theme.getColor("tv_hint"));
 
-        TextView tv8 = findViewById(R.id.tv8);
-        tv8.setTextColor(Global.theme.getColor("tv_hint"));
+        //TextView tv8 = findViewById(R.id.tv8);
+        //tv8.setTextColor(Global.theme.getColor("tv_hint"));
 
 
 
@@ -208,12 +269,15 @@ public class AddTodoActivity extends AppCompatActivity {
             }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DATE)).show();
         });
 
+
         reminderBt.setOnClickListener(v -> {
             new AlertDialog.Builder(this).setTitle("提提你").setItems(Global.reminderQ, (dialogInterface, i) -> {
                 reminderIndex = i;
                 reminderTv.setText(Global.reminder[reminderIndex]);
             }).show();
         });
+
+
 
         importanceBt.setOnClickListener(v -> {
             new AlertDialog.Builder(this).setTitle("重要性").setItems(Global.importanceQ, (dialogInterface, i) -> {

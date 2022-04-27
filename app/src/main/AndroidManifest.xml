@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity
+            android:name=".SubtaskActivity"
+            android:exported="true" />
+        <activity
             android:name=".AddTodoActivity"
             android:exported="true" />
         <activity
@@ -20,10 +23,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- broadcast receiver -->
-        <receiver android:name=".ReminderBroadcast"/>
+        </activity> <!-- broadcast receiver -->
+        <receiver android:name=".ReminderBroadcast" />
     </application>
 
 </manifest>

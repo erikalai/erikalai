@@ -239,4 +239,5 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         db = this.getWritableDatabase();
         return db.rawQuery(s, null);
     }
+
 }

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">記低</string>
+
+    <string-array name="themes">
+        <item>測試</item>
+        <item>test</item>
+    </string-array>
 </resources>

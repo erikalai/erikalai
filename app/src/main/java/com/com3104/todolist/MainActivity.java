@@ -4,6 +4,7 @@ package com.com3104.todolist;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 
 import android.annotation.SuppressLint;
@@ -16,6 +17,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -23,12 +25,18 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.com3104.todolist.Model.DataItem;
@@ -49,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<ArrayList<HashMap<String, String>>> childItems;
     MyCategoriesExpandableListAdapter myCategoriesExpandableListAdapter;
 
-    @SuppressLint("Range")
+    @SuppressLint({"Range", "ResourceType"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,9 +90,72 @@ public class MainActivity extends AppCompatActivity {
         //titleBar.setBackgroundDrawable(cd);
         //titleBar.setTitle(Html.fromHtml("<font color=\"" + Global.theme.getFg() + "\">" + Global.APP_NAME + "</font>"));
 
-        Button themeBt = findViewById(R.id.theme_bt);
-        themeBt.setBackgroundColor(Global.theme.getColor("theme_bt_bg"));
-        themeBt.setTextColor(Global.theme.getColor("theme_bt_fg"));
+
+        //Button themeBt = findViewById(R.id.theme_bt);
+        //themeBt.setBackgroundColor(Global.theme.getColor("theme_bt_bg"));
+        //themeBt.setTextColor(Global.theme.getColor("theme_bt_fg"));
+
+
+        LinearLayout themeLl = findViewById(R.id.theme_ll);
+        themeLl.setBackgroundColor(Global.theme.getColor("theme_ll"));
+
+        Spinner themeS = findViewById(R.id.theme_s);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                R.layout.spinner_item, Global.getThemeNames()) {
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+
+                ((TextView) v).setTextSize(30);
+                ((TextView) v).setTextColor(Color.BLACK);
+
+                return v;
+            }
+
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View v = super.getDropDownView(position, convertView, parent);
+                v.setBackgroundColor(Global.theme.getColor("theme_s_bg"));
+                ((TextView) v).setTextColor(Global.theme.getColor("theme_s_fg"));
+                ((TextView) v).setTextSize(30);
+                ((TextView) v).setGravity(Gravity.CENTER);
+
+                return v;
+            }
+        };
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        themeS.getBackground().setColorFilter(ContextCompat.getColor(this,
+                R.color.black), PorterDuff.Mode.SRC_ATOP);
+
+        themeS.setAdapter(adapter);
+        themeS.setSelection(themeID, false);
+        themeS.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Global.theme = Global.THEMES[position];
+                SharedPreferences.Editor editor = Global.sharedPreferences.edit();
+                editor.putInt("Theme", position);
+                editor.commit();
+
+                Intent intent1 = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent1);
+                MainActivity.this.finish();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        ImageView themeSArrow = findViewById(R.id.theme_s_arrow);
+        themeSArrow.setOnClickListener(v -> {
+            themeS.performClick();
+        });
+
+
+
+
+        TextView noTodoTv = findViewById(R.id.no_todo_tv);
+        noTodoTv.setTextColor(Global.theme.getColor("no_todo_tv_fg"));
 
         todoLv = findViewById(R.id.todo_lv);
         todoLv.setBackgroundColor(Global.theme.getColor("todo_lv_bg"));
@@ -95,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 Log.d("DEBUG", Global.todos.get(groupPosition) + " " + Global.todoSubtasks.get(groupPosition).get(childPosition).getTitle());
+
                 return false;
             }
         });
@@ -137,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+        /*
         themeBt.setOnClickListener(v -> {
             new AlertDialog.Builder(this).setTitle("主題色").setItems(Global.getThemeNames(), (dialogInterface, i) -> {
                 Global.theme = Global.THEMES[i];
@@ -150,6 +222,8 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.finish();
             }).show();
         });
+        */
+
 
         addTodoBt.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, AddTodoActivity.class);
@@ -172,13 +246,20 @@ public class MainActivity extends AppCompatActivity {
         resultCounts = cursor.getCount();
         if (resultCounts == 0 || !cursor.moveToFirst()) {
             // no data
+            ((ViewGroup) todoLv.getParent()).removeView(todoLv);
+            //todoLv.setVisibility(View.INVISIBLE);
+            //noTodoTv.setVisibility(View.VISIBLE);
         } else {
+            ((ViewGroup) noTodoTv.getParent()).removeView(noTodoTv);
+            //noTodoTv.setVisibility(View.INVISIBLE);
+            //todoLv.setVisibility(View.VISIBLE);
+
             int id, important;
             Integer subtaskID = null;
             String title, subtaskTitle, subtaskNote, deadlineDate, deadlineTime;
             boolean subtaskDone;
             ArrayList<Subtask> tempSubtasks = new ArrayList<>();
-            Log.d("DEBUG", "resultCounts: " + resultCounts);
+            //Log.d("DEBUG", "resultCounts: " + resultCounts);
             for (int i = 0; i < resultCounts; i++) {
                 id = cursor.getInt(cursor.getColumnIndex("todo_id"));
                 title = cursor.getString(cursor.getColumnIndex("title"));
@@ -211,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
 
                     tempSubtasks.add(new Subtask(subtaskID, subtaskTitle, subtaskNote, subtaskDone));
                 }
-                Log.d("DEBUG", title + " length: " + tempSubtasks.size());
+                //Log.d("DEBUG", title + " length: " + tempSubtasks.size());
 
 
                 if (!Global.todoIDs.contains(id)) {
@@ -242,7 +323,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         for (int i = 0, n = Global.todoIDs.size(); i < n; i++) {
-            Log.d("DEBUG", "Global.todos.get(" + i + "): " + Global.todos.get(i));
+            //Log.d("DEBUG", "Global.todos.get(" + i + "): " + Global.todos.get(i));
             DataItem dataItem = new DataItem();
             dataItem.setCategoryId(Integer.toString(i+1));
             dataItem.setCategoryName(Global.todos.get(i));
@@ -251,10 +332,10 @@ public class MainActivity extends AppCompatActivity {
             for (int j = 0, m = Global.todoSubtasks.get(i).size(); j < m; j++) {
                 SubCategoryItem subCategoryItem = new SubCategoryItem();
                 subCategoryItem.setCategoryId(String.valueOf(Global.todoSubtasks.get(i).get(j).getID()));
-                subCategoryItem.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
+                subCategoryItem.setIsChecked((Global.todoSubtasks.get(i).get(j).getDone() ? ConstantManager.CHECK_BOX_CHECKED_TRUE : ConstantManager.CHECK_BOX_CHECKED_FALSE));
                 subCategoryItem.setSubCategoryName(Global.todoSubtasks.get(i).get(j).getTitle());
                 arSubCategory.add(subCategoryItem);
-                Log.d("DEBUG", "arSubCategory[" + Global.todos.get(i) + "].add(" + Global.todoSubtasks.get(i).get(j).getTitle() + ");");
+                //Log.d("DEBUG", "arSubCategory[" + Global.todos.get(i) + "].add(" + Global.todoSubtasks.get(i).get(j).getTitle() + ");");
             }
 
             dataItem.setSubCategory(arSubCategory);

@@ -1,7 +1,10 @@
 package com.com3104.todolist;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,9 +106,32 @@ public class MyCategoriesExpandableListAdapter extends BaseExpandableListAdapter
         }
 
         viewHolderParent.cbMainCategory.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("Range")
             @Override
             public void onClick(View view) {
-                if (viewHolderParent.cbMainCategory.isChecked()) {
+                int todoID = Global.todoIDs.get(groupPosition);
+                boolean checked = viewHolderParent.cbMainCategory.isChecked();
+
+                ArrayList<Integer> ids = new ArrayList<>();
+
+                // find all ids of todoID
+                Cursor cursor = Global.myDb.query("select ST.id id from todolist TL inner join subtask ST on TL.todo_id=ST.todo_id where TL.todo_id=" + todoID + ";");
+                int resultCounts = cursor.getCount();
+                if (resultCounts == 0 || !cursor.moveToFirst()) {
+                    // no data
+                } else {
+                    for (int i = 0; i < resultCounts; i++) {
+                        ids.add(cursor.getInt(cursor.getColumnIndex("id")));
+                        cursor.moveToNext();
+                    }
+                }
+
+                for (int i = 0, n = ids.size(); i < n; i++) {
+                    Global.myDb.sql("update subtask set done = " + (checked ? 1 : 0) + " where id = " + ids.get(i) + ";");
+                }
+
+
+                if (checked) {
                     parentItems.get(groupPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_TRUE);
 
                     for (int i = 0; i < childItems.get(groupPosition).size(); i++) {
@@ -166,13 +192,25 @@ public class MyCategoriesExpandableListAdapter extends BaseExpandableListAdapter
         viewHolderChild.cbSubCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (viewHolderChild.cbSubCategory.isChecked()) {
+                int id = Global.todoSubtasks.get(groupPosition).get(childPosition).getID();
+                boolean checked = viewHolderChild.cbSubCategory.isChecked();
+
+                //ContentValues cv = new ContentValues();
+                //cv.put("done", checked);
+                //Global.myDb.update("subtask", cv, "id = ?", new String[]{Integer.toString(id)});
+                Global.myDb.sql("update subtask set done = " + (checked ? 1 : 0) + " where id = " + id + ";");
+
+
+                if (checked) {
                     childItems.get(groupPosition).get(childPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_TRUE);
-                    Log.d("DEBUG", "checkbox: " + groupPosition + " " + childPosition + " check");
+                    //Log.d("DEBUG", "checkbox: " + groupPosition + " " + childPosition + " check");
+                    Log.d("DEBUG", "todo_id: " + Global.todoIDs.get(groupPosition) + ", subtask_id: " + Global.todoSubtasks.get(groupPosition).get(childPosition).getID() + " check");
                 } else {
                     childItems.get(groupPosition).get(childPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
-                    Log.d("DEBUG", "checkbox: " + groupPosition + " " + childPosition + " uncheck");
+                    //Log.d("DEBUG", "checkbox: " + groupPosition + " " + childPosition + " uncheck");
+                    Log.d("DEBUG", "todo_id: " + Global.todoIDs.get(groupPosition) + ", subtask_id: " + Global.todoSubtasks.get(groupPosition).get(childPosition).getID() + " uncheck");
                 }
+
 
                 count = 0;
                 notifyDataSetChanged();
