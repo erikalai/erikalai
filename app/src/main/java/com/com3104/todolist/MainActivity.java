@@ -232,6 +232,8 @@ public class MainActivity extends AppCompatActivity {
             MainActivity.this.finish();
         });
 
+
+
         //ArrayList<Spanned> todos = new ArrayList<>();
         Global.todos = new ArrayList<>();
         Global.todoIDs = new ArrayList<>();
@@ -242,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
         parentItems = new ArrayList<>();
         childItems = new ArrayList<>();
 
-        cursor = Global.myDb.query("select TL.todo_id todo_id, TL.title title, TL.important important, date(TL.deadline) deadline_date, time(TL.deadline) deadline_time, ST.id subtask_id, ST.title subtask_title, ST.note subtask_note, ST.done subtask_done from todolist TL left join subtask ST on TL.todo_id=ST.todo_id order by case when deadline_date is null then 1 else 0 end, deadline_date, deadline_time, important desc, title, subtask_id;");
+        cursor = Global.myDb.query("select TL.todo_id todo_id, TL.title title, TL.important important, date(TL.deadline) deadline_date, time(TL.deadline) deadline_time, ST.id subtask_id, ST.title subtask_title, ST.note subtask_note, ST.done subtask_done, done_or_not all_done from todolist TL left join subtask ST on TL.todo_id=ST.todo_id inner join (select TL.todo_id TL2_todo_id, (sum(ST.done)/count(ST.id)) done_or_not from todolist TL left join subtask ST on TL.todo_id=ST.todo_id group by TL.todo_id order by case when done_or_not is null then 1 else 0 end) TL2 on TL.todo_id=TL2.TL2_todo_id order by case when all_done is null then 1 else 0 end, all_done, case when deadline_date is null then 1 else 0 end, deadline_date, deadline_time, important desc, title, subtask_id;");
         resultCounts = cursor.getCount();
         if (resultCounts == 0 || !cursor.moveToFirst()) {
             // no data
