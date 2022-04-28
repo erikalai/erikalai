@@ -288,16 +288,14 @@ public class AddTodoActivity extends AppCompatActivity {
 
         addSubtaskBt.setOnClickListener(v -> {
             String subtaskTitle = subtaskTitleEt.getText().toString().trim();
-            String subtaskNote = subtaskNoteEt.getText().toString().trim();
+            String subtaskNote = subtaskNoteEt.getText().toString().trim().replaceAll("\n+", "\n");
 
             if (subtaskTitle.equals("")) {
-                Toast.makeText(AddTodoActivity.this, "Please enter subtask title", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddTodoActivity.this, "你想加啲咩子任務呢？", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            if (subtaskNote.equals("")) {
-                subtaskNote = null;
-            }
+            subtaskNote = (subtaskNote.equals("") ? null : subtaskNote);
 
             // add to subtasks
             subtasks.add(new Subtask(subtaskTitle, subtaskNote, false));
@@ -345,12 +343,12 @@ public class AddTodoActivity extends AppCompatActivity {
         saveBt.setOnClickListener(v -> {
             String title = titleEt.getText().toString().trim();
             if (title.equals("")) {
-                Toast.makeText(AddTodoActivity.this, "Please enter title", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddTodoActivity.this, "有咩做先？", Toast.LENGTH_SHORT).show();
                 return;
             }
             if ((!setDate || date == null) && reminderIndex != 0) {
                 // no date but have reminder
-                Toast.makeText(AddTodoActivity.this, "Please enter date if reminder is set. Otherwise, set reminder to None.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddTodoActivity.this, "你未有死期，唔知點提你好喎\uD83D\uDE48", Toast.LENGTH_SHORT).show();
                 return;
             }
 

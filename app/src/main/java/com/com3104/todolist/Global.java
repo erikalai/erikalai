@@ -140,7 +140,7 @@ public class Global {
 
 
     public static String[] reminder = new String[] {
-            "冇",
+            "唔洗",
             "即刻提你",
             "5分鐘前",
             "10分鐘前",
@@ -154,7 +154,7 @@ public class Global {
     };
 
     public static String[] reminderQ = new String[] {
-            "冇？",
+            "唔洗？",
             "即刻提你？",
             "5分鐘前？",
             "10分鐘前？",

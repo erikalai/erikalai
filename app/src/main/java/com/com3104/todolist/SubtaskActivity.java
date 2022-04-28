@@ -65,6 +65,7 @@ public class SubtaskActivity extends AppCompatActivity {
         } else {
             title = cursor.getString(cursor.getColumnIndex("title"));
             note = cursor.getString(cursor.getColumnIndex("note"));
+            note = (note == null ? "" : note);
         }
 
         titleEt.setText(title);
@@ -79,14 +80,16 @@ public class SubtaskActivity extends AppCompatActivity {
         backBt.setOnClickListener(v -> {
             // save data to database
             String saveTitle = titleEt.getText().toString().trim();
-            String saveNote = noteEt.getText().toString().trim();
+            String saveNote = noteEt.getText().toString().trim().replaceAll("\n+", "\n");
+
+            saveNote = (saveNote.equals("") ? null : saveNote);
 
             if (saveTitle.equals("")) {
                 // delete subtask
                 Global.myDb.sql("delete from subtask where id = " + subtaskID + ";");
             } else {
                 // update
-                Global.myDb.sql("update subtask set title = '" + saveTitle + "', note = '" + saveNote + "' where id = " + subtaskID + ";");
+                Global.myDb.sql("update subtask set title = '" + saveTitle + "', note = " + (saveNote == null ? "NULL" : "'" + saveNote + "'") + " where id = " + subtaskID + ";");
             }
 
             // change page
