@@ -24,16 +24,16 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // create tables
-        db.execSQL("create table todolistdefault (todo_id integer primary key autoincrement, title VARCHAR(50) not null);");
-        db.execSQL("create table subtaskdefault (id integer primary key autoincrement, todo_id int not null, title varchar(50) not null, done boolean not null);");
+        //db.execSQL("create table todolistdefault (todo_id integer primary key autoincrement, title VARCHAR(50) not null);");
+        //db.execSQL("create table subtaskdefault (id integer primary key autoincrement, todo_id int not null, title varchar(50) not null, done boolean not null);");
         db.execSQL("create table todolist (todo_id integer primary key autoincrement, title varchar(50) not null, deadline text, important int not null, note varchar(300));");
         db.execSQL("create table subtask (id integer primary key autoincrement, todo_id int not null, title varchar(50) not null, note varchar(300), done boolean not null);");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS todolistdefault;");
-        db.execSQL("DROP TABLE IF EXISTS subtaskdefault;");
+        //db.execSQL("DROP TABLE IF EXISTS todolistdefault;");
+        //db.execSQL("DROP TABLE IF EXISTS subtaskdefault;");
         db.execSQL("DROP TABLE IF EXISTS todolist;");
         db.execSQL("DROP TABLE IF EXISTS subtask;");
 
@@ -42,13 +42,15 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 
     @SuppressLint("Range")
     public void init() {
-        db.execSQL("DROP TABLE IF EXISTS todolistdefault;");
-        db.execSQL("DROP TABLE IF EXISTS subtaskdefault;");
+        //db.execSQL("DROP TABLE IF EXISTS todolistdefault;");
+        //db.execSQL("DROP TABLE IF EXISTS subtaskdefault;");
         db.execSQL("DROP TABLE IF EXISTS todolist;");
         db.execSQL("DROP TABLE IF EXISTS subtask;");
         onCreate(db);
 
+
         // initial data
+        /*
         ContentValues contentValues = new ContentValues();
         contentValues.put("title", "生活");
         insertData("todolistdefault", contentValues);
@@ -221,6 +223,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
             contentValues.put("done", false);
             insertData("subtaskdefault", contentValues);
         }
+        */
 
 
     }

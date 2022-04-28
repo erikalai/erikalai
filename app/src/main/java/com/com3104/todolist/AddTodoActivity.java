@@ -393,14 +393,14 @@ public class AddTodoActivity extends AppCompatActivity {
             if (setDate && (date != null) && (reminderIndex != 0)) {
                 // reminder notification
                 Intent intent2 = new Intent(AddTodoActivity.this, ReminderBroadcast.class);
-                intent2.putExtra("title", "提提你");
+                intent2.putExtra("title", "提提你！");
                 DateFormat dtf1 = new SimpleDateFormat("yyyy-MM-dd");
                 DateFormat dtf2 = new SimpleDateFormat("HH:mm");
                 if (reminderIndex == 1) {
                     // 即刻提你
                     intent2.putExtra("msg", Global.importancePrefix[importanceIndex] + title + "死期到！");
                 } else {
-                    intent2.putExtra("msg", "，" + Global.importancePrefix[importanceIndex] + title + "仲有" + Global.reminder[reminderIndex] + "就死期到！\n死期：" + Utils.formatChineseDate(dtf1.format(date.getTime())) + " " + dtf2.format(date.getTime()));
+                    intent2.putExtra("msg", Global.importancePrefix[importanceIndex] + title + "仲有" + Global.reminder[reminderIndex].replaceAll("前", "") + "就死期到！\uD83D\uDE48\n死期：" + Utils.formatChineseDate(dtf1.format(date.getTime())) + " " + dtf2.format(date.getTime()));
                 }
                 int id = new Random().nextInt(543250);
                 intent2.putExtra("id", Integer.toString(id));
