@@ -8,6 +8,7 @@ import java.util.HashMap;
 public class Global {
     private static HashMap<String, String> colorMap;
 
+    public static int finishedStartPosition;
     public static final String APP_NAME = "記低";
     public static final Theme[] THEMES = new Theme[] {
             //colorMap = new HashMap<>();
@@ -63,6 +64,7 @@ public class Global {
                 put("add_todo_subtask_note", "#606060");
                 put("theme_s_bg", "#FBB600");
                 put("theme_s_fg", "#FFFFFF");
+                put("separate_line_fg", "#606060");
             }}),
 
 
@@ -73,7 +75,7 @@ public class Global {
                 put("theme_bt_bg", "#FFC11E");
                 put("theme_bt_fg", "#000000");
                 put("todo_lv_bg", "#000000");
-                put("todo_lv_divider", "#EEEEEE");
+                put("todo_lv_divider", "#606060");
                 put("add_todo_bt_bg", "#FFFFFF");
                 put("add_todo_bt_ripple", "#FFC11E");
                 put("add_todo_bt_filter", "#000000");
@@ -118,6 +120,7 @@ public class Global {
                 put("add_todo_subtask_note", "#CCCCCC");
                 put("theme_s_bg", "#FBB600");
                 put("theme_s_fg", "#000000");
+                put("separate_line_fg", "#CCCCCC");
             }})
 
             //new Theme("活力黃", "#FFFFFF", "#FFC11E", "#FFC11E", "#606060", "#000000"),

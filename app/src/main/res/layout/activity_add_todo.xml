@@ -28,7 +28,7 @@
                 android:id="@+id/tv2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="做嘢清單      "
+                android:text="做嘢清單📝     "
                 android:textSize="30sp"
                 android:textStyle="bold"
                 android:gravity="center"/>

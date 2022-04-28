@@ -21,7 +21,6 @@ public class MyCategoriesExpandableListAdapter extends BaseExpandableListAdapter
 
     private final ArrayList<ArrayList<HashMap<String, String>>> childItems;
     private ArrayList<HashMap<String, String>> parentItems;
-    //    private final ArrayList<HashMap<String, String>> childItems;
     private LayoutInflater inflater;
     private Activity activity;
     private HashMap<String, String> child;
@@ -29,14 +28,12 @@ public class MyCategoriesExpandableListAdapter extends BaseExpandableListAdapter
     private boolean isFromMyCategoriesFragment;
 
     public MyCategoriesExpandableListAdapter(Activity activity, ArrayList<HashMap<String, String>> parentItems,
-                                             ArrayList<ArrayList<HashMap<String, String>>> childItems,boolean isFromMyCategoriesFragment) {
-
+                                             ArrayList<ArrayList<HashMap<String, String>>> childItems, boolean isFromMyCategoriesFragment) {
         this.parentItems = parentItems;
         this.childItems = childItems;
         this.activity = activity;
         this.isFromMyCategoriesFragment = isFromMyCategoriesFragment;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
     }
 
     @Override
@@ -78,14 +75,31 @@ public class MyCategoriesExpandableListAdapter extends BaseExpandableListAdapter
     public View getGroupView(final int groupPosition, final boolean b, View convertView, ViewGroup viewGroup) {
          final ViewHolderParent viewHolderParent;
         if (convertView == null) {
-
             if (isFromMyCategoriesFragment) {
+                /*
+                if (groupPosition == Global.finishedStartPosition) {
+                    convertView = inflater.inflate(R.layout.group_list_layout_my_categories_with_bar, null);
+                    ((TextView)convertView.findViewById(R.id.separate_line)).setTextColor(Global.theme.getColor("separate_line_fg"));
+                    ((TextView)convertView.findViewById(R.id.bar_divider)).setBackgroundColor(Global.theme.getColor("todo_lv_divider"));
+                } else {
+                    convertView = inflater.inflate(R.layout.group_list_layout_my_categories, null);
+                }
+                */
                 convertView = inflater.inflate(R.layout.group_list_layout_my_categories, null);
-                ((TextView)convertView.findViewById(R.id.tvMainCategoryName)).setTextColor(Global.theme.getColor("tvMainCategoryName"));
             } else {
+                /*
+                if (groupPosition == Global.finishedStartPosition) {
+                    convertView = inflater.inflate(R.layout.group_list_layout_choose_categories_with_bar, null);
+                    ((TextView)convertView.findViewById(R.id.separate_line)).setTextColor(Global.theme.getColor("separate_line_fg"));
+                    ((TextView)convertView.findViewById(R.id.bar_divider)).setBackgroundColor(Global.theme.getColor("todo_lv_divider"));
+                } else {
+                    convertView = inflater.inflate(R.layout.group_list_layout_choose_categories, null);
+                }
+                */
                 convertView = inflater.inflate(R.layout.group_list_layout_choose_categories, null);
-                ((TextView)convertView.findViewById(R.id.tvMainCategoryName)).setTextColor(Global.theme.getColor("tvMainCategoryName"));
             }
+
+            ((TextView)convertView.findViewById(R.id.tvMainCategoryName)).setTextColor(Global.theme.getColor("tvMainCategoryName"));
             viewHolderParent = new ViewHolderParent();
 
             viewHolderParent.tvMainCategoryName = convertView.findViewById(R.id.tvMainCategoryName);
@@ -96,14 +110,9 @@ public class MyCategoriesExpandableListAdapter extends BaseExpandableListAdapter
             viewHolderParent = (ViewHolderParent) convertView.getTag();
         }
 
-        if (parentItems.get(groupPosition).get(ConstantManager.Parameter.IS_CHECKED).equalsIgnoreCase(ConstantManager.CHECK_BOX_CHECKED_TRUE)) {
-            viewHolderParent.cbMainCategory.setChecked(true);
-            notifyDataSetChanged();
 
-        } else {
-            viewHolderParent.cbMainCategory.setChecked(false);
-            notifyDataSetChanged();
-        }
+        viewHolderParent.cbMainCategory.setChecked(parentItems.get(groupPosition).get(ConstantManager.Parameter.IS_CHECKED).equalsIgnoreCase(ConstantManager.CHECK_BOX_CHECKED_TRUE));
+        notifyDataSetChanged();
 
         viewHolderParent.cbMainCategory.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("Range")
@@ -138,16 +147,14 @@ public class MyCategoriesExpandableListAdapter extends BaseExpandableListAdapter
                         childItems.get(groupPosition).get(i).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_TRUE);
                     }
                     Log.d("DEBUG", "Group checkbox: " + groupPosition + " check");
-                    notifyDataSetChanged();
-
                 } else {
                     parentItems.get(groupPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
                     for (int i = 0; i < childItems.get(groupPosition).size(); i++) {
                         childItems.get(groupPosition).get(i).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
                     }
                     Log.d("DEBUG", "Group checkbox: " + groupPosition + " uncheck");
-                    notifyDataSetChanged();
                 }
+                notifyDataSetChanged();
             }
         });
 
@@ -180,13 +187,8 @@ public class MyCategoriesExpandableListAdapter extends BaseExpandableListAdapter
             viewHolderChild = (ViewHolderChild) convertView.getTag();
         }
 
-        if (childItems.get(groupPosition).get(childPosition).get(ConstantManager.Parameter.IS_CHECKED).equalsIgnoreCase(ConstantManager.CHECK_BOX_CHECKED_TRUE)) {
-            viewHolderChild.cbSubCategory.setChecked(true);
-            notifyDataSetChanged();
-        } else {
-            viewHolderChild.cbSubCategory.setChecked(false);
-            notifyDataSetChanged();
-        }
+        viewHolderChild.cbSubCategory.setChecked(childItems.get(groupPosition).get(childPosition).get(ConstantManager.Parameter.IS_CHECKED).equalsIgnoreCase(ConstantManager.CHECK_BOX_CHECKED_TRUE));
+        notifyDataSetChanged();
 
         viewHolderChild.tvSubCategoryName.setText(child.get(ConstantManager.Parameter.SUB_CATEGORY_NAME));
         viewHolderChild.cbSubCategory.setOnClickListener(new View.OnClickListener() {

@@ -167,6 +167,14 @@ public class MainActivity extends AppCompatActivity {
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 Log.d("DEBUG", Global.todos.get(groupPosition) + " " + Global.todoSubtasks.get(groupPosition).get(childPosition).getTitle());
 
+
+
+                Intent intent = new Intent(MainActivity.this, SubtaskActivity.class);
+                intent.putExtra("fromPage", "MainActivity");
+                intent.putExtra("subtaskID", Global.todoSubtasks.get(groupPosition).get(childPosition).getID());
+                startActivity(intent);
+                MainActivity.this.finish();
+
                 return false;
             }
         });
@@ -175,6 +183,8 @@ public class MainActivity extends AppCompatActivity {
         addTodoBt.setBackgroundTintList(ColorStateList.valueOf(Global.theme.getColor("add_todo_bt_bg")));
         addTodoBt.setRippleColor(Global.theme.getColor("add_todo_bt_ripple"));
         addTodoBt.setColorFilter(Global.theme.getColor("add_todo_bt_filter"));
+
+
 
         Drawable unwrappedDrawable = AppCompatResources.getDrawable(this, R.drawable.edit_text_theme);
         Drawable wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable);
@@ -340,16 +350,18 @@ public class MainActivity extends AppCompatActivity {
             arCategory.add(dataItem);
         }
 
+        boolean addedLine = false;
+        int counter = 0;
 
-        for (DataItem data : arCategory) {
+        for (DataItem finishBox : arCategory) {
             ArrayList<HashMap<String, String>> childArrayList = new ArrayList<>();
             HashMap<String, String> mapParent = new HashMap<>();
 
-            mapParent.put(ConstantManager.Parameter.CATEGORY_ID, data.getCategoryId());
-            mapParent.put(ConstantManager.Parameter.CATEGORY_NAME, data.getCategoryName());
+            mapParent.put(ConstantManager.Parameter.CATEGORY_ID, finishBox.getCategoryId());
+            mapParent.put(ConstantManager.Parameter.CATEGORY_NAME, finishBox.getCategoryName());
 
             int countIsChecked = 0;
-            for (SubCategoryItem subCategoryItem : data.getSubCategory()) {
+            for (SubCategoryItem subCategoryItem : finishBox.getSubCategory()) {
                 HashMap<String, String> mapChild = new HashMap<>();
                 mapChild.put(ConstantManager.Parameter.SUB_ID, subCategoryItem.getSubId());
                 mapChild.put(ConstantManager.Parameter.SUB_CATEGORY_NAME, subCategoryItem.getSubCategoryName());
@@ -362,22 +374,28 @@ public class MainActivity extends AppCompatActivity {
                 childArrayList.add(mapChild);
             }
 
-            if (countIsChecked == data.getSubCategory().size()) {
-                data.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_TRUE);
+            if (countIsChecked == finishBox.getSubCategory().size()) {
+                if (!addedLine) {
+                    addedLine = true;
+                    Global.finishedStartPosition = counter;
+                }
+                finishBox.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_TRUE);
             } else {
-                data.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
+                finishBox.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
             }
 
-            mapParent.put(ConstantManager.Parameter.IS_CHECKED,data.getIsChecked());
+            mapParent.put(ConstantManager.Parameter.IS_CHECKED, finishBox.getIsChecked());
             childItems.add(childArrayList);
             parentItems.add(mapParent);
+
+            counter++;
 
         }
 
         ConstantManager.parentItems = parentItems;
         ConstantManager.childItems = childItems;
 
-        myCategoriesExpandableListAdapter = new MyCategoriesExpandableListAdapter(this,parentItems,childItems,false);
+        myCategoriesExpandableListAdapter = new MyCategoriesExpandableListAdapter(this, parentItems, childItems, false);
         todoLv.setAdapter(myCategoriesExpandableListAdapter);
 
     }
