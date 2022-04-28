@@ -18,20 +18,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MyCategoriesExpandableListAdapter extends BaseExpandableListAdapter {
-
     private final ArrayList<ArrayList<HashMap<String, String>>> childItems;
-    private ArrayList<HashMap<String, String>> parentItems;
-    private LayoutInflater inflater;
-    private Activity activity;
+    private final ArrayList<HashMap<String, String>> parentItems;
+    private final LayoutInflater inflater;
     private HashMap<String, String> child;
     private int count = 0;
-    private boolean isFromMyCategoriesFragment;
+    private final boolean isFromMyCategoriesFragment;
 
     public MyCategoriesExpandableListAdapter(Activity activity, ArrayList<HashMap<String, String>> parentItems,
                                              ArrayList<ArrayList<HashMap<String, String>>> childItems, boolean isFromMyCategoriesFragment) {
         this.parentItems = parentItems;
         this.childItems = childItems;
-        this.activity = activity;
         this.isFromMyCategoriesFragment = isFromMyCategoriesFragment;
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -76,26 +73,8 @@ public class MyCategoriesExpandableListAdapter extends BaseExpandableListAdapter
          final ViewHolderParent viewHolderParent;
         if (convertView == null) {
             if (isFromMyCategoriesFragment) {
-                /*
-                if (groupPosition == Global.finishedStartPosition) {
-                    convertView = inflater.inflate(R.layout.group_list_layout_my_categories_with_bar, null);
-                    ((TextView)convertView.findViewById(R.id.separate_line)).setTextColor(Global.theme.getColor("separate_line_fg"));
-                    ((TextView)convertView.findViewById(R.id.bar_divider)).setBackgroundColor(Global.theme.getColor("todo_lv_divider"));
-                } else {
-                    convertView = inflater.inflate(R.layout.group_list_layout_my_categories, null);
-                }
-                */
                 convertView = inflater.inflate(R.layout.group_list_layout_my_categories, null);
             } else {
-                /*
-                if (groupPosition == Global.finishedStartPosition) {
-                    convertView = inflater.inflate(R.layout.group_list_layout_choose_categories_with_bar, null);
-                    ((TextView)convertView.findViewById(R.id.separate_line)).setTextColor(Global.theme.getColor("separate_line_fg"));
-                    ((TextView)convertView.findViewById(R.id.bar_divider)).setBackgroundColor(Global.theme.getColor("todo_lv_divider"));
-                } else {
-                    convertView = inflater.inflate(R.layout.group_list_layout_choose_categories, null);
-                }
-                */
                 convertView = inflater.inflate(R.layout.group_list_layout_choose_categories, null);
             }
 
@@ -197,19 +176,14 @@ public class MyCategoriesExpandableListAdapter extends BaseExpandableListAdapter
                 int id = Global.todoSubtasks.get(groupPosition).get(childPosition).getID();
                 boolean checked = viewHolderChild.cbSubCategory.isChecked();
 
-                //ContentValues cv = new ContentValues();
-                //cv.put("done", checked);
-                //Global.myDb.update("subtask", cv, "id = ?", new String[]{Integer.toString(id)});
                 Global.myDb.sql("update subtask set done = " + (checked ? 1 : 0) + " where id = " + id + ";");
 
 
                 if (checked) {
                     childItems.get(groupPosition).get(childPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_TRUE);
-                    //Log.d("DEBUG", "checkbox: " + groupPosition + " " + childPosition + " check");
                     Log.d("DEBUG", "todo_id: " + Global.todoIDs.get(groupPosition) + ", subtask_id: " + Global.todoSubtasks.get(groupPosition).get(childPosition).getID() + " check");
                 } else {
                     childItems.get(groupPosition).get(childPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
-                    //Log.d("DEBUG", "checkbox: " + groupPosition + " " + childPosition + " uncheck");
                     Log.d("DEBUG", "todo_id: " + Global.todoIDs.get(groupPosition) + ", subtask_id: " + Global.todoSubtasks.get(groupPosition).get(childPosition).getID() + " uncheck");
                 }
 
@@ -217,12 +191,13 @@ public class MyCategoriesExpandableListAdapter extends BaseExpandableListAdapter
                 count = 0;
                 notifyDataSetChanged();
 
-                for (int i = 0; i < childItems.get(groupPosition).size(); i++) {
+                for (int i = 0, n = childItems.get(groupPosition).size(); i < n; i++) {
                     if (childItems.get(groupPosition).get(i).get(ConstantManager.Parameter.IS_CHECKED).equalsIgnoreCase(ConstantManager.CHECK_BOX_CHECKED_TRUE)) {
                         count++;
                     }
                 }
                 if (count == childItems.get(groupPosition).size()) {
+                    // all checked
                     parentItems.get(groupPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_TRUE);
                 } else {
                     parentItems.get(groupPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
@@ -253,14 +228,12 @@ public class MyCategoriesExpandableListAdapter extends BaseExpandableListAdapter
     }
 
     private class ViewHolderParent {
-
         TextView tvMainCategoryName;
         CheckBox cbMainCategory;
         ImageView ivCategory;
     }
 
     private class ViewHolderChild {
-
         TextView tvSubCategoryName;
         CheckBox cbSubCategory;
         View viewDivider;

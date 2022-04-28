@@ -1,11 +1,5 @@
 package com.com3104.todolist;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
-
-import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -14,38 +8,27 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
-import android.text.Spanned;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -55,9 +38,7 @@ import java.util.Random;
 
 public class AddTodoActivity extends AppCompatActivity {
     private Calendar date = null;
-    private EditText titleEt, noteEt, subtaskTitleEt, subtaskNoteEt;
-    ListView subtaskLv;
-    TextView subtaskTv;
+    private EditText titleEt, subtaskTitleEt, subtaskNoteEt;
     ArrayList<Subtask> subtasks = new ArrayList<>();
 
     private int reminderIndex = 0;
@@ -77,18 +58,6 @@ public class AddTodoActivity extends AppCompatActivity {
         // background color
         ConstraintLayout window = findViewById(R.id.add_todo_activity_window);
         window.setBackgroundColor(Global.theme.getColor("add_todo_activity_window"));
-
-        // title bar color
-        //ActionBar titleBar;
-        //titleBar = getSupportActionBar();
-        //ColorDrawable cd = new ColorDrawable(Global.theme.getBgColor());
-        //titleBar.setBackgroundDrawable(cd);
-        //titleBar.setTitle(Html.fromHtml("<font color=\"" + Global.theme.getFg() + "\">" + Global.APP_NAME + "</font>"));
-
-
-        //TextView titleTv = findViewById(R.id.title_tv);
-        //titleTv.setTextColor(Global.theme.getFgColor());
-
 
 
         ImageButton backBt = findViewById(R.id.add_todo_back_bt);
@@ -112,57 +81,6 @@ public class AddTodoActivity extends AppCompatActivity {
         reminderBt.setTextColor(Global.theme.getColor("reminder_bt_fg"));
 
 
-        /*
-        LinearLayout reminderLl = findViewById(R.id.reminder_ll);
-        reminderLl.setBackgroundColor(Global.theme.getColor("reminder_ll"));
-
-        Spinner reminderS = findViewById(R.id.reminder_s);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                R.layout.spinner_item, Global.reminder) {
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View v = super.getView(position, convertView, parent);
-
-                ((TextView) v).setTextSize(30);
-                ((TextView) v).setTextColor(Color.BLACK);
-
-                return v;
-            }
-
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                View v = super.getDropDownView(position, convertView, parent);
-                v.setBackgroundColor(Global.theme.getColor("theme_s_bg"));
-                ((TextView) v).setTextColor(Global.theme.getColor("theme_s_fg"));
-                ((TextView) v).setTextSize(30);
-                ((TextView) v).setGravity(Gravity.CENTER);
-
-                return v;
-            }
-        };
-        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        reminderS.getBackground().setColorFilter(ContextCompat.getColor(this,
-                R.color.black), PorterDuff.Mode.SRC_ATOP);
-
-        reminderS.setAdapter(adapter);
-        reminderS.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("DEBUG", position+"");
-                reminderIndex = position;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        ImageView reminderSArrow = findViewById(R.id.reminder_s_arrow);
-        reminderSArrow.setOnClickListener(v -> {
-            reminderS.performClick();
-        });
-        */
-
-
 
         TextView reminderTv = findViewById(R.id.reminder_tv);
         reminderTv.setTextColor(Global.theme.getColor("reminder_tv"));
@@ -176,10 +94,6 @@ public class AddTodoActivity extends AppCompatActivity {
         importanceTv.setTextColor(Global.theme.getColor("importance_tv"));
         importanceTv.setText(Global.importance[importanceIndex]);
 
-        noteEt = findViewById(R.id.note_et);
-        noteEt.setTextColor(Global.theme.getColor("note_et_fg"));
-        noteEt.setHintTextColor(Global.theme.getColor("note_et_hint"));
-        noteEt.setBackgroundTintList(ColorStateList.valueOf(Global.theme.getColor("note_et_bg")));
 
         subtaskTitleEt = findViewById(R.id.subtask_title_et);
         subtaskTitleEt.setTextColor(Global.theme.getColor("subtask_title_et_fg"));
@@ -194,9 +108,6 @@ public class AddTodoActivity extends AppCompatActivity {
         Button addSubtaskBt = findViewById(R.id.add_subtask_bt);
         addSubtaskBt.setBackgroundColor(Global.theme.getColor("add_subtask_bt_bg"));
         addSubtaskBt.setTextColor(Global.theme.getColor("add_subtask_bt_fg"));
-
-        //subtaskTv = findViewById(R.id.subtask_tv);
-        //subtaskTv.setTextColor(Global.theme.getFgColor());
 
         Button saveBt = findViewById(R.id.save_bt);
         saveBt.setBackgroundColor(Global.theme.getColor("save_bt_bg"));
@@ -302,16 +213,8 @@ public class AddTodoActivity extends AppCompatActivity {
 
             // load subtasks
             ArrayList<String> temp = Utils.getSubtasksTitles(subtasks);
-            /*
-            String temp2 = "";
-            for (int i = 0; i < temp.size(); i++) {
-                temp2 += (i == 0 ? "" : "\n") + temp.get(i);
-            }
-            subtaskTv.setText(temp2);
-            */
 
-
-            TableLayout table = (TableLayout)AddTodoActivity.this.findViewById(R.id.subtask_tl);
+            TableLayout table = AddTodoActivity.this.findViewById(R.id.subtask_tl);
 
             // reset TableLayout
             while (table.getChildCount() >= 1) {
@@ -360,15 +263,11 @@ public class AddTodoActivity extends AppCompatActivity {
                 contentValues.put("deadline", dtf.format(date.getTime()));
             }
             contentValues.put("important", importanceIndex);
-            if (noteEt != null) {
-                contentValues.put("note", noteEt.getText().toString().trim());
-            }
             Global.myDb.insertData("todolist", contentValues);
             // get back autoincrement id
             long todolistID = -1;
             Cursor cursor = Global.myDb.query("SELECT last_insert_rowid() id;");
             if (cursor.moveToFirst()) {
-                //Log.d("DEBUG", Long.toString(cursor.getLong(0)));
                 todolistID = cursor.getLong(0);
             }
 

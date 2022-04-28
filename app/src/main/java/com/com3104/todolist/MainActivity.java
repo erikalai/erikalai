@@ -8,9 +8,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,22 +17,16 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.Spanned;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -49,9 +40,8 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity {
     ExpandableListView todoLv;
 
-    ArrayList<DataItem> arCategory;
-    ArrayList<SubCategoryItem> arSubCategory;
-    ArrayList<ArrayList<SubCategoryItem>> arSubCategoryFinal;
+    ArrayList<DataItem> categories;
+    ArrayList<SubCategoryItem> subCategories;
 
     ArrayList<HashMap<String, String>> parentItems;
     ArrayList<ArrayList<HashMap<String, String>>> childItems;
@@ -83,18 +73,6 @@ public class MainActivity extends AppCompatActivity {
         ConstraintLayout window = findViewById(R.id.main_activity_window);
         window.setBackgroundColor(Global.theme.getColor("main_activity_window"));
 
-        // title bar color
-        //ActionBar titleBar;
-        //titleBar = getSupportActionBar();
-        //ColorDrawable cd = new ColorDrawable(Global.theme.getBgColor());
-        //titleBar.setBackgroundDrawable(cd);
-        //titleBar.setTitle(Html.fromHtml("<font color=\"" + Global.theme.getFg() + "\">" + Global.APP_NAME + "</font>"));
-
-
-        //Button themeBt = findViewById(R.id.theme_bt);
-        //themeBt.setBackgroundColor(Global.theme.getColor("theme_bt_bg"));
-        //themeBt.setTextColor(Global.theme.getColor("theme_bt_fg"));
-
 
         LinearLayout themeLl = findViewById(R.id.theme_ll);
         themeLl.setBackgroundColor(Global.theme.getColor("theme_ll"));
@@ -121,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
                 return v;
             }
         };
-        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         themeS.getBackground().setColorFilter(ContextCompat.getColor(this,
                 R.color.black), PorterDuff.Mode.SRC_ATOP);
 
@@ -142,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                // do nothing
             }
         });
 
@@ -221,22 +199,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        /*
-        themeBt.setOnClickListener(v -> {
-            new AlertDialog.Builder(this).setTitle("主題色").setItems(Global.getThemeNames(), (dialogInterface, i) -> {
-                Global.theme = Global.THEMES[i];
-                SharedPreferences.Editor editor = Global.sharedPreferences.edit();
-                editor.putInt("Theme", i);
-                editor.commit();
-
-                Intent intent1 = new Intent(MainActivity.this, MainActivity.class);
-                startActivity(intent1);
-                MainActivity.this.finish();
-            }).show();
-        });
-        */
-
-
         addTodoBt.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, AddTodoActivity.class);
             intent.putExtra("fromPage", "MainActivity");
@@ -251,8 +213,8 @@ public class MainActivity extends AppCompatActivity {
         Global.todoIDs = new ArrayList<>();
         Global.todoSubtasks = new ArrayList<>();
 
-        arCategory = new ArrayList<>();
-        arSubCategory = new ArrayList<>();
+        categories = new ArrayList<>();
+        subCategories = new ArrayList<>();
         parentItems = new ArrayList<>();
         childItems = new ArrayList<>();
 
@@ -314,48 +276,26 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        /*
-        ArrayAdapter<Spanned> adapter = new ArrayAdapter<Spanned>(
-                MainActivity.this, R.layout.todo_listview, todos) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-
-                TextView textView = (TextView) view.findViewById(R.id.text1);
-
-                textView.setTextColor(Global.theme.getFgColor());
-
-                return view;
-            }
-        };
-        todoLv.setAdapter(adapter);
-        */
-
 
         for (int i = 0, n = Global.todoIDs.size(); i < n; i++) {
-            //Log.d("DEBUG", "Global.todos.get(" + i + "): " + Global.todos.get(i));
             DataItem dataItem = new DataItem();
             dataItem.setCategoryId(Integer.toString(i+1));
             dataItem.setCategoryName(Global.todos.get(i));
 
-            arSubCategory = new ArrayList<>();
+            subCategories = new ArrayList<>();
             for (int j = 0, m = Global.todoSubtasks.get(i).size(); j < m; j++) {
                 SubCategoryItem subCategoryItem = new SubCategoryItem();
                 subCategoryItem.setCategoryId(String.valueOf(Global.todoSubtasks.get(i).get(j).getID()));
                 subCategoryItem.setIsChecked((Global.todoSubtasks.get(i).get(j).getDone() ? ConstantManager.CHECK_BOX_CHECKED_TRUE : ConstantManager.CHECK_BOX_CHECKED_FALSE));
                 subCategoryItem.setSubCategoryName(Global.todoSubtasks.get(i).get(j).getTitle());
-                arSubCategory.add(subCategoryItem);
-                //Log.d("DEBUG", "arSubCategory[" + Global.todos.get(i) + "].add(" + Global.todoSubtasks.get(i).get(j).getTitle() + ");");
+                subCategories.add(subCategoryItem);
             }
 
-            dataItem.setSubCategory(arSubCategory);
-            arCategory.add(dataItem);
+            dataItem.setSubCategory(subCategories);
+            categories.add(dataItem);
         }
 
-        boolean addedLine = false;
-        int counter = 0;
-
-        for (DataItem finishBox : arCategory) {
+        for (DataItem finishBox : categories) {
             ArrayList<HashMap<String, String>> childArrayList = new ArrayList<>();
             HashMap<String, String> mapParent = new HashMap<>();
 
@@ -376,22 +316,13 @@ public class MainActivity extends AppCompatActivity {
                 childArrayList.add(mapChild);
             }
 
-            if (countIsChecked == finishBox.getSubCategory().size()) {
-                if (!addedLine) {
-                    addedLine = true;
-                    Global.finishedStartPosition = counter;
-                }
-                finishBox.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_TRUE);
-            } else {
-                finishBox.setIsChecked(ConstantManager.CHECK_BOX_CHECKED_FALSE);
-            }
+
+            finishBox.setIsChecked(countIsChecked == finishBox.getSubCategory().size() ? ConstantManager.CHECK_BOX_CHECKED_TRUE : ConstantManager.CHECK_BOX_CHECKED_FALSE);
+
 
             mapParent.put(ConstantManager.Parameter.IS_CHECKED, finishBox.getIsChecked());
             childItems.add(childArrayList);
             parentItems.add(mapParent);
-
-            counter++;
-
         }
 
         ConstantManager.parentItems = parentItems;
@@ -399,8 +330,5 @@ public class MainActivity extends AppCompatActivity {
 
         myCategoriesExpandableListAdapter = new MyCategoriesExpandableListAdapter(this, parentItems, childItems, false);
         todoLv.setAdapter(myCategoriesExpandableListAdapter);
-
     }
-
-    
 }

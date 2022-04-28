@@ -3,14 +3,12 @@ package com.com3104.todolist.Model;
 import java.util.List;
 
 public class DataItem {
-
     private String categoryId;
     private String categoryName;
     private String isChecked = "NO";
     private List<SubCategoryItem> subCategory;
 
-    public DataItem() {
-    }
+    public DataItem() {}
 
     public String getCategoryId() {
         return categoryId;

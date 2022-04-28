@@ -6,12 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Global {
-    private static HashMap<String, String> colorMap;
-
-    public static int finishedStartPosition;
-    public static final String APP_NAME = "記低";
     public static final Theme[] THEMES = new Theme[] {
-            //colorMap = new HashMap<>();
             new Theme("活力黃", new HashMap<String, String>() {{
                 put("main_activity_window", "#FFFFFF");
                 put("no_todo_tv_fg", "#606060");
@@ -30,7 +25,7 @@ public class Global {
                 put("add_todo_activity_window", "#FFFFFF");
                 put("add_todo_back_bt_bg", "#FFC11E");
                 put("add_todo_back_bt_filter", "#000000");
-                put("title_et_fg", "#606060");
+                put("title_et_fg", "#000000");
                 put("title_et_hint", "#FFC11E");
                 put("title_et_bg", "#606060");
                 put("datetime_bt_bg", "#FFC11E");
@@ -46,7 +41,7 @@ public class Global {
                 put("note_et_fg", "#606060");
                 put("note_et_hint", "#FFC11E");
                 put("note_et_bg", "#606060");
-                put("subtask_title_et_fg", "#606060");
+                put("subtask_title_et_fg", "#000000");
                 put("subtask_title_et_hint", "#FFC11E");
                 put("subtask_title_et_bg", "#606060");
                 put("subtask_note_et_fg", "#606060");
@@ -122,10 +117,8 @@ public class Global {
                 put("theme_s_fg", "#000000");
                 put("separate_line_fg", "#CCCCCC");
             }})
-
-            //new Theme("活力黃", "#FFFFFF", "#FFC11E", "#FFC11E", "#606060", "#000000"),
-            //new Theme("神秘黑", "#000000", "#000000", "#000000", "#606060", "#FFC11E")
     };
+
     public static Theme theme;
 
     public static SharedPreferences sharedPreferences = null;
@@ -167,7 +160,7 @@ public class Global {
             "1個禮拜前？"
     };
 
-    public static long reminderDelay[] = new long[] {
+    public static long[] reminderDelay = new long[] {
             0, // None
             0, // By the time
             1000 * 60 * (-5), // 5 minutes before
