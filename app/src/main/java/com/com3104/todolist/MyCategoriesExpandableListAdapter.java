@@ -16,8 +16,8 @@ import com.com3104.todolist.Model.SubCategoryItem;
 import java.util.ArrayList;
 
 public class MyCategoriesExpandableListAdapter extends BaseExpandableListAdapter {
-    private final ArrayList<ArrayList<SubCategoryItem>> childItems;
     private final ArrayList<DataItem> parentItems;
+    private final ArrayList<ArrayList<SubCategoryItem>> childItems;
     private final LayoutInflater inflater;
     private SubCategoryItem child;
     private int count = 0;
@@ -175,10 +175,10 @@ public class MyCategoriesExpandableListAdapter extends BaseExpandableListAdapter
                 }
 
                 // mark as finish if all subtask are finished
-                parentItems.get(groupPosition).setIsChecked(count == childItems.get(groupPosition).size());
+                parentItems.get(groupPosition)
+                        .setIsChecked(count == childItems.get(groupPosition).size());
 
                 notifyDataSetChanged();
-
 
                 Global.childItems = childItems;
                 Global.parentItems = parentItems;

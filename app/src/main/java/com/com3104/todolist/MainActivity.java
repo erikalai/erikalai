@@ -35,7 +35,6 @@ import com.com3104.todolist.Model.SubCategoryItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
     ExpandableListView todoLv;
@@ -171,34 +170,6 @@ public class MainActivity extends AppCompatActivity {
         // database
         Global.myDb = new DBOpenHelper(this);
 
-        /*
-        // check if tables have data
-        Cursor cursor = Global.myDb.query("select TLD.todo_id id, TLD.title title, STD.title subtask from todolistdefault TLD left join subtaskdefault STD on TLD.todo_id=STD.todo_id;");
-        Cursor cursor2 = Global.myDb.query("select * from subtaskdefault;");
-        int resultCounts = cursor.getCount();
-        int resultCounts2 = cursor2.getCount();
-        if ((resultCounts == 0 || !cursor.moveToFirst()) && (resultCounts2 == 0 || !cursor2.moveToFirst())) {
-            // no init data
-            Global.myDb.init();
-        } else {
-            int id;
-            String title, subtask;
-            for (int i = 0; i < resultCounts; i++) {
-                id = cursor.getInt(cursor.getColumnIndex("id"));
-                title = cursor.getString(cursor.getColumnIndex("title"));
-                subtask = cursor.getString(cursor.getColumnIndex("subtask"));
-                if (subtask == null) {
-                    Log.d("DEBUG", "Todo list " + id + ": " + title + " (empty subtask)");
-                } else {
-                    Log.d("DEBUG", "Todo list " + id + ": " + title + ", subtask: " + subtask);
-                }
-                cursor.moveToNext();
-            }
-        }
-        */
-
-
-
         addTodoBt.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, AddTodoActivity.class);
             intent.putExtra("fromPage", "MainActivity");
@@ -273,13 +244,13 @@ public class MainActivity extends AppCompatActivity {
 
         for (int i = 0, n = Global.todoIDs.size(); i < n; i++) {
             DataItem dataItem = new DataItem();
-            dataItem.setCategoryId(i+1);
+            dataItem.setCategoryID(i+1);
             dataItem.setCategoryName(Global.todos.get(i));
 
             subCategories = new ArrayList<>();
             for (int j = 0, m = Global.todoSubtasks.get(i).size(); j < m; j++) {
                 SubCategoryItem subCategoryItem = new SubCategoryItem();
-                subCategoryItem.setCategoryId(Global.todoSubtasks.get(i).get(j).getID());
+                subCategoryItem.setCategoryID(Global.todoSubtasks.get(i).get(j).getID());
                 subCategoryItem.setIsChecked(Global.todoSubtasks.get(i).get(j).getDone());
                 subCategoryItem.setSubCategoryName(Global.todoSubtasks.get(i).get(j).getTitle());
                 subCategories.add(subCategoryItem);

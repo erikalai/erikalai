@@ -3,19 +3,19 @@ package com.com3104.todolist.Model;
 import java.util.List;
 
 public class DataItem {
-    private int categoryId;
+    private int categoryID;
     private String categoryName;
     private boolean isChecked = false;
     private List<SubCategoryItem> subCategory;
 
     public DataItem() {}
 
-    public int getCategoryId() {
-        return categoryId;
+    public int getCategoryID() {
+        return categoryID;
     }
 
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
+    public void setCategoryID(int categoryID) {
+        this.categoryID = categoryID;
     }
 
     public String getCategoryName() {

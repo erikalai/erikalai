@@ -1,23 +1,23 @@
 package com.com3104.todolist.Model;
 
 public class SubCategoryItem {
-    private int categoryId;
-    private int subId;
+    private int categoryID;
+    private int subID;
     private String subCategoryName;
     private boolean isChecked;
 
     public SubCategoryItem() {}
 
-    public int getCategoryId() {
-        return categoryId;
+    public int getCategoryID() {
+        return categoryID;
     }
 
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
+    public void setCategoryID(int categoryID) {
+        this.categoryID = categoryID;
     }
 
-    public int getSubId() {
-        return subId;
+    public int getSubID() {
+        return subID;
     }
 
     public String getSubCategoryName() {
