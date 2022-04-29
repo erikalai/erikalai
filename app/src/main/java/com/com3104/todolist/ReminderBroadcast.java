@@ -15,7 +15,6 @@ public class ReminderBroadcast extends BroadcastReceiver {
         builder.setSmallIcon(R.drawable.ic_launcher);
         builder.setColor(Color.parseColor("#FFE8AD"));
         builder.setContentTitle(intent.getStringExtra("title"));
-        //builder.setContentText(intent.getStringExtra("msg"));
         builder.setStyle(new
                 NotificationCompat.BigTextStyle().bigText(intent.getStringExtra("msg")));
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);

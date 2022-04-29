@@ -9,11 +9,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 public class DBOpenHelper extends SQLiteOpenHelper {
-
     private static final String DB_NAME = "todo.db";
     private static final int DB_VERSION = 1;
     private SQLiteDatabase db;
-
 
     public DBOpenHelper(@Nullable Context context) {
         super(context, DB_NAME, null, DB_VERSION);
