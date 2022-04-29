@@ -72,11 +72,7 @@ public class MyCategoriesExpandableListAdapter extends BaseExpandableListAdapter
     public View getGroupView(final int groupPosition, final boolean b, View convertView, ViewGroup viewGroup) {
          final ViewHolderParent viewHolderParent;
         if (convertView == null) {
-            if (isFromMyCategoriesFragment) {
-                convertView = inflater.inflate(R.layout.group_list_layout_my_categories, null);
-            } else {
-                convertView = inflater.inflate(R.layout.group_list_layout_choose_categories, null);
-            }
+            convertView = inflater.inflate((isFromMyCategoriesFragment ? R.layout.group_list_layout_my_categories : R.layout.group_list_layout_choose_categories), null);
 
             ((TextView)convertView.findViewById(R.id.tvMainCategoryName)).setTextColor(Global.theme.getColor("tvMainCategoryName"));
             viewHolderParent = new ViewHolderParent();
@@ -119,20 +115,20 @@ public class MyCategoriesExpandableListAdapter extends BaseExpandableListAdapter
                 }
 
 
+                parentItems.get(groupPosition).put(ConstantManager.Parameter.IS_CHECKED, (checked ? ConstantManager.CHECK_BOX_CHECKED_TRUE : ConstantManager.CHECK_BOX_CHECKED_FALSE));
+
                 if (checked) {
                     parentItems.get(groupPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_TRUE);
-
                     for (int i = 0; i < childItems.get(groupPosition).size(); i++) {
                         childItems.get(groupPosition).get(i).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_TRUE);
                     }
-                    Log.d("DEBUG", "Group checkbox: " + groupPosition + " check");
                 } else {
                     parentItems.get(groupPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
                     for (int i = 0; i < childItems.get(groupPosition).size(); i++) {
                         childItems.get(groupPosition).get(i).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
                     }
-                    Log.d("DEBUG", "Group checkbox: " + groupPosition + " uncheck");
                 }
+
                 notifyDataSetChanged();
             }
         });
@@ -178,15 +174,7 @@ public class MyCategoriesExpandableListAdapter extends BaseExpandableListAdapter
 
                 Global.myDb.sql("update subtask set done = " + (checked ? 1 : 0) + " where id = " + id + ";");
 
-
-                if (checked) {
-                    childItems.get(groupPosition).get(childPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_TRUE);
-                    Log.d("DEBUG", "todo_id: " + Global.todoIDs.get(groupPosition) + ", subtask_id: " + Global.todoSubtasks.get(groupPosition).get(childPosition).getID() + " check");
-                } else {
-                    childItems.get(groupPosition).get(childPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
-                    Log.d("DEBUG", "todo_id: " + Global.todoIDs.get(groupPosition) + ", subtask_id: " + Global.todoSubtasks.get(groupPosition).get(childPosition).getID() + " uncheck");
-                }
-
+                childItems.get(groupPosition).get(childPosition).put(ConstantManager.Parameter.IS_CHECKED, (checked ? ConstantManager.CHECK_BOX_CHECKED_TRUE : ConstantManager.CHECK_BOX_CHECKED_FALSE));
 
                 count = 0;
                 notifyDataSetChanged();
@@ -196,12 +184,10 @@ public class MyCategoriesExpandableListAdapter extends BaseExpandableListAdapter
                         count++;
                     }
                 }
-                if (count == childItems.get(groupPosition).size()) {
-                    // all checked
-                    parentItems.get(groupPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_TRUE);
-                } else {
-                    parentItems.get(groupPosition).put(ConstantManager.Parameter.IS_CHECKED, ConstantManager.CHECK_BOX_CHECKED_FALSE);
-                }
+
+                // mark as finish if all subtask are finished
+                parentItems.get(groupPosition).put(ConstantManager.Parameter.IS_CHECKED, (count == childItems.get(groupPosition).size() ? ConstantManager.CHECK_BOX_CHECKED_TRUE : ConstantManager.CHECK_BOX_CHECKED_FALSE));
+
                 notifyDataSetChanged();
 
 

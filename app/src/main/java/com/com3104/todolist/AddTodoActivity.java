@@ -80,8 +80,6 @@ public class AddTodoActivity extends AppCompatActivity {
         reminderBt.setBackgroundColor(Global.theme.getColor("reminder_bt_bg"));
         reminderBt.setTextColor(Global.theme.getColor("reminder_bt_fg"));
 
-
-
         TextView reminderTv = findViewById(R.id.reminder_tv);
         reminderTv.setTextColor(Global.theme.getColor("reminder_tv"));
         reminderTv.setText(Global.reminder[reminderIndex]);

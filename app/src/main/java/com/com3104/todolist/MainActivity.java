@@ -231,7 +231,6 @@ public class MainActivity extends AppCompatActivity {
             String title, subtaskTitle, subtaskNote, deadlineDate, deadlineTime;
             boolean subtaskDone;
             ArrayList<Subtask> tempSubtasks = new ArrayList<>();
-            //Log.d("DEBUG", "resultCounts: " + resultCounts);
             for (int i = 0; i < resultCounts; i++) {
                 id = cursor.getInt(cursor.getColumnIndex("todo_id"));
                 title = cursor.getString(cursor.getColumnIndex("title"));
@@ -241,11 +240,9 @@ public class MainActivity extends AppCompatActivity {
                 if (!Global.todoIDs.contains(id)) {
                     if (deadlineDate == null || deadlineTime == null) {
                         // no deadline
-                        //todos.add(Html.fromHtml(Global.importancePrefix[important] + "<font color=\"" + Global.theme.getBtFg() + "\">" + title + "</font>"));
                         Global.todos.add(Global.importancePrefix[important] + title);
                     } else {
                         // have deadline
-                        //todos.add(Html.fromHtml(Global.importancePrefix[important] + "<font color=\"" + Global.theme.getBtFg() + "\">" + title + "</font><br>(" + Utils.formatChineseDate(deadlineDate) + " " + deadlineTime + ")"));
                         Global.todos.add(Global.importancePrefix[important] + title + "\n(" + Utils.formatChineseDate(deadlineDate) + " " + deadlineTime + ")");
                     }
                 }
@@ -264,14 +261,11 @@ public class MainActivity extends AppCompatActivity {
 
                     tempSubtasks.add(new Subtask(subtaskID, subtaskTitle, subtaskNote, subtaskDone));
                 }
-                //Log.d("DEBUG", title + " length: " + tempSubtasks.size());
-
 
                 if (!Global.todoIDs.contains(id)) {
                     Global.todoIDs.add(id);
                     Global.todoSubtasks.add(tempSubtasks);
                 }
-
                 cursor.moveToNext();
             }
         }
@@ -316,9 +310,8 @@ public class MainActivity extends AppCompatActivity {
                 childArrayList.add(mapChild);
             }
 
-
+            // mark as finish if all subtask are finished
             finishBox.setIsChecked(countIsChecked == finishBox.getSubCategory().size() ? ConstantManager.CHECK_BOX_CHECKED_TRUE : ConstantManager.CHECK_BOX_CHECKED_FALSE);
-
 
             mapParent.put(ConstantManager.Parameter.IS_CHECKED, finishBox.getIsChecked());
             childItems.add(childArrayList);
