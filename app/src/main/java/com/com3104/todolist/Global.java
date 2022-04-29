@@ -2,6 +2,9 @@ package com.com3104.todolist;
 
 import android.content.SharedPreferences;
 
+import com.com3104.todolist.Model.DataItem;
+import com.com3104.todolist.Model.SubCategoryItem;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -195,6 +198,9 @@ public class Global {
             importance[3] + "❔"
     };
 
+
+    public static ArrayList<ArrayList<SubCategoryItem>> childItems = new ArrayList<>();
+    public static ArrayList<DataItem> parentItems = new ArrayList<>();
 
 
 

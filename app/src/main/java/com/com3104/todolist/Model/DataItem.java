@@ -3,18 +3,18 @@ package com.com3104.todolist.Model;
 import java.util.List;
 
 public class DataItem {
-    private String categoryId;
+    private int categoryId;
     private String categoryName;
-    private String isChecked = "NO";
+    private boolean isChecked = false;
     private List<SubCategoryItem> subCategory;
 
     public DataItem() {}
 
-    public String getCategoryId() {
+    public int getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(String categoryId) {
+    public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
     }
 
@@ -26,11 +26,11 @@ public class DataItem {
         this.categoryName = categoryName;
     }
 
-    public String getIsChecked() {
+    public boolean getIsChecked() {
         return isChecked;
     }
 
-    public void setIsChecked(String isChecked) {
+    public void setIsChecked(boolean isChecked) {
         this.isChecked = isChecked;
     }
 

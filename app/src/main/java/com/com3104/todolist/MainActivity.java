@@ -43,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<DataItem> categories;
     ArrayList<SubCategoryItem> subCategories;
 
-    ArrayList<HashMap<String, String>> parentItems;
-    ArrayList<ArrayList<HashMap<String, String>>> childItems;
+    ArrayList<DataItem> parentItems;
+    ArrayList<ArrayList<SubCategoryItem>> childItems;
     MyCategoriesExpandableListAdapter myCategoriesExpandableListAdapter;
 
     @SuppressLint({"Range", "ResourceType"})
@@ -273,14 +273,14 @@ public class MainActivity extends AppCompatActivity {
 
         for (int i = 0, n = Global.todoIDs.size(); i < n; i++) {
             DataItem dataItem = new DataItem();
-            dataItem.setCategoryId(Integer.toString(i+1));
+            dataItem.setCategoryId(i+1);
             dataItem.setCategoryName(Global.todos.get(i));
 
             subCategories = new ArrayList<>();
             for (int j = 0, m = Global.todoSubtasks.get(i).size(); j < m; j++) {
                 SubCategoryItem subCategoryItem = new SubCategoryItem();
-                subCategoryItem.setCategoryId(String.valueOf(Global.todoSubtasks.get(i).get(j).getID()));
-                subCategoryItem.setIsChecked((Global.todoSubtasks.get(i).get(j).getDone() ? ConstantManager.CHECK_BOX_CHECKED_TRUE : ConstantManager.CHECK_BOX_CHECKED_FALSE));
+                subCategoryItem.setCategoryId(Global.todoSubtasks.get(i).get(j).getID());
+                subCategoryItem.setIsChecked(Global.todoSubtasks.get(i).get(j).getDone());
                 subCategoryItem.setSubCategoryName(Global.todoSubtasks.get(i).get(j).getTitle());
                 subCategories.add(subCategoryItem);
             }
@@ -290,36 +290,25 @@ public class MainActivity extends AppCompatActivity {
         }
 
         for (DataItem finishBox : categories) {
-            ArrayList<HashMap<String, String>> childArrayList = new ArrayList<>();
-            HashMap<String, String> mapParent = new HashMap<>();
-
-            mapParent.put(ConstantManager.Parameter.CATEGORY_ID, finishBox.getCategoryId());
-            mapParent.put(ConstantManager.Parameter.CATEGORY_NAME, finishBox.getCategoryName());
-
+            ArrayList<SubCategoryItem> childArrayList = new ArrayList<>();
             int countIsChecked = 0;
             for (SubCategoryItem subCategoryItem : finishBox.getSubCategory()) {
-                HashMap<String, String> mapChild = new HashMap<>();
-                mapChild.put(ConstantManager.Parameter.SUB_ID, subCategoryItem.getSubId());
-                mapChild.put(ConstantManager.Parameter.SUB_CATEGORY_NAME, subCategoryItem.getSubCategoryName());
-                mapChild.put(ConstantManager.Parameter.CATEGORY_ID, subCategoryItem.getCategoryId());
-                mapChild.put(ConstantManager.Parameter.IS_CHECKED, subCategoryItem.getIsChecked());
-
-                if (subCategoryItem.getIsChecked().equalsIgnoreCase(ConstantManager.CHECK_BOX_CHECKED_TRUE)) {
+                if (subCategoryItem.getIsChecked()) {
                     countIsChecked++;
                 }
-                childArrayList.add(mapChild);
+                childArrayList.add(subCategoryItem);
             }
 
             // mark as finish if all subtask are finished
-            finishBox.setIsChecked(countIsChecked == finishBox.getSubCategory().size() ? ConstantManager.CHECK_BOX_CHECKED_TRUE : ConstantManager.CHECK_BOX_CHECKED_FALSE);
+            finishBox.setIsChecked(countIsChecked == finishBox.getSubCategory().size());
 
-            mapParent.put(ConstantManager.Parameter.IS_CHECKED, finishBox.getIsChecked());
+
             childItems.add(childArrayList);
-            parentItems.add(mapParent);
+            parentItems.add(finishBox);
         }
 
-        ConstantManager.parentItems = parentItems;
-        ConstantManager.childItems = childItems;
+        Global.parentItems = parentItems;
+        Global.childItems = childItems;
 
         myCategoriesExpandableListAdapter = new MyCategoriesExpandableListAdapter(this, parentItems, childItems, false);
         todoLv.setAdapter(myCategoriesExpandableListAdapter);
